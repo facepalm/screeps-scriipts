@@ -45,7 +45,7 @@ var plantFlags = function (room) {
             if (obj['type'] == 'terrain' && obj['terrain'] != 'normal'){
                 //WILL NOT MINE FROM SWAMP.  This may not be a bad thing
                 currvalid = false;
-            }else if (obj['type'] == 'structure'){
+            }else if (obj['type'] == 'structure' || obj['type'] == 'source'){
                 //no building on buildings, the can needs to go here
                 currvalid = false;
             }
