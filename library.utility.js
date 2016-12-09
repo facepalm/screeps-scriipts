@@ -57,8 +57,13 @@
                 output.unshift(MOVE);
                 capacity -= 50;
             }
-            for (var i =0;i<capacity;i+=100){
+            var workcap = capacity
+            for (var i =0;i<workcap;i+=100){
                 output.unshift(WORK);
+                capacity -= 100;                
+            }
+            if (capacity >= 50){
+                output.unshift(MOVE); //one last move if we have the juice
             }
         }
         if (spec == 'hauler'){
