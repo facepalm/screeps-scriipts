@@ -13,10 +13,16 @@ var roleBee = require('role.worker_bee');
 var builder = require('library.build');
 var util = require('library.utility');
 
+var strat = require('library.strategy');
+
 var controllerRoom = {
 
     /** @param {Room} room **/
     run: function(room) {
+        
+        if (!room.memory.planted){
+            room.memory.planted = strat.plantFlags(room);
+        }
         
         /* start a timer to space out probably-expensive update operations */
         if (!room.memory.einputs){ room.memory.einputs = {}; }
