@@ -42,7 +42,7 @@ var plantFlags = function (room) {
             
             
             
-            if (obj['type'] == 'terrain' && obj['terrain'] != 'normal'){
+            if (obj['type'] == 'terrain' && obj['terrain'] != 'plain'){
                 //WILL NOT MINE FROM SWAMP.  This may not be a bad thing
                 currvalid = false;
             }else if (obj['type'] == 'structure' || obj['type'] == 'source'){
@@ -61,8 +61,8 @@ var plantFlags = function (room) {
     
     //tower sites
     
-        
-    };
+    return true;  
+};
     
 var test = function () {};    
     
