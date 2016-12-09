@@ -34,6 +34,9 @@ var roleHarvester = {
                     if (!cons.length && !strc.length){
                         creep.pos.createConstructionSite(STRUCTURE_CONTAINER);
                     }
+                    if (strc.length){
+                        creep.room.memory.einputs[strc[0].id] = true;
+                    }
                 }
             }else{
                 creep.moveTo(flag);

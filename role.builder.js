@@ -39,8 +39,7 @@ var roleBuilder = {
 	            if (pckup == ERR_NOT_IN_RANGE) {
                     creep.moveTo(nrg[0]);
                 }
-	        }else{
-	        
+	        }else{	            
 	            for (var s in creep.room.memory.estorage){
 	                var obj = Game.getObjectById(s);
 	                var withd = creep.withdraw(obj,RESOURCE_ENERGY,50);
