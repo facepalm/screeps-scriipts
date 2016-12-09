@@ -27,17 +27,17 @@ var controllerRoom = {
         
         //Go over storage dicts, strip dead buildings
         for (var i in room.memory.einputs){
-            if (!Game.getObjectById[i]){
+            if (!Game.structures[i]){
                 delete room.memory.einputs[i];
             }
         }
         for (var i in room.memory.estorage){
-            if (!Game.getObjectById[i]){
+            if (!Game.structures[i]){
                 delete room.memory.estorage[i];
             }
         }
         for (var i in room.memory.endpoints){
-            if (!Game.getObjectById[i]){
+            if (!Game.structures[i]){
                 delete room.memory.endpoints[i];
             }
         }

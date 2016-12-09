@@ -31,10 +31,13 @@ var roleBuilder = {
 	    else {
 	        //if we aren't building, we must be fetching energy
 	        
-	        var sources = creep.pos.findClosestByRange(FIND_SOURCES);
-            if(creep.harvest(sources) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources);
-            }
+	        for (var s in creep.room.memory.estorage){
+	            var obj = Game.getObjectById(s);
+	            var withd = creep.withdraw(obj,RESOURCE_ENERGY,50);
+	            if (withd == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(obj);
+                }
+	        }
 	    }
 	    return 1;
 	}
