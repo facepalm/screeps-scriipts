@@ -16,7 +16,9 @@ var roleBuilder = {
 	        if (!creep.memory.target || !Game.constructionSites[creep.memory.target]){
 	            //find a new target
 	            var targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
-	            creep.memory.target = targets.id;
+	            if (targets){
+	                creep.memory.target = targets.id;
+	            }
             
 	        }
 	        if(creep.memory.target) {
