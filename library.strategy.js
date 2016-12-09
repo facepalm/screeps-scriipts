@@ -25,7 +25,8 @@ var plantFlags = function (room) {
         var curry = 0;
         var currvalid = false;
         
-        for (var obj in objlist){
+        for (var o in objlist){
+            var obj = objlist[o];
             if (obj['x'] != currx || obj['y'] != curry){
                 if (currvalid){
                     //we had a valid point
