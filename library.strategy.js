@@ -31,7 +31,7 @@ var plantFlags = function (room) {
                 if (currvalid){
                     //we had a valid point
                     console.log(obj['x']+ ' '+currx)
-                    flagname = room.createFlag(currx,curry,undefined,COLOR_YELLOW,COLOR_YELLOW);
+                    var flagname = room.createFlag(currx,curry,undefined,COLOR_YELLOW,COLOR_YELLOW);
                     Game.flags[flagname].memory.source = sources[s].id;
                     
                     break;
@@ -66,16 +66,16 @@ var plantFlags = function (room) {
     return true;  
 };
 
-var findFlag(room,flagType){
+var findFlag = function(room,flagType){
     //locates and returns a flag of the specified type
     if (flagType == 'MINING'){
         //return EMPTY miner flag
         var flags = room.find(FIND_FLAGS);
         for (var f in flags){
             var flag = flags[f];
-            if (flag.color = COLOR_YELLOW && flag.secondaryColor = COLOR_YELLOW 
-                    && (!flag.memory.creep || !Game.creep[flag.memory.miner])){
-                return flag.id        
+            if (flag.color == COLOR_YELLOW && flag.secondaryColor == COLOR_YELLOW 
+                    && (!flag.memory.creep || !Game.creep[flag.memory.creep])){
+                return flag.name      
             }
         }
     }

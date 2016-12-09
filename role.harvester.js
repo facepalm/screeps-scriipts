@@ -1,4 +1,4 @@
-var strat = require('library.strat');
+var strat = require('library.strategy');
 
 var roleHarvester = {
 
@@ -8,16 +8,16 @@ var roleHarvester = {
     run: function(creep) {
 
         if (!creep.memory.flag){
-            var flag_id = strat.findFlag(creep.room,'MINING');
-            if (flag_id){
-                creep.memory.flag = flag_id;
+            var flag_nm = strat.findFlag(creep.room,'MINING');
+            if (flag_nm){
+                creep.memory.flag = flag_nm;
                 flag.memory.creep = creep.id;
             }
         
         }
         
         if (creep.memory.flag){
-            var flag = Game.getObjectById(creep.memory.flag);
+            var flag = Game.flags[creep.memory.flag];
             if (creep.pos.inRangeTo(flag.pos, 0)){
                 var harv = creep.harvest(Game.getObjectById(flag.memory.source));
                 if( harv == ERR_NOT_IN_RANGE) {
