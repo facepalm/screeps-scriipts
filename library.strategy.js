@@ -74,7 +74,7 @@ var findFlag = function(room,flagType){
         for (var f in flags){
             var flag = flags[f];
             if (flag.color == COLOR_YELLOW && flag.secondaryColor == COLOR_YELLOW 
-                    && (!flag.memory.creep || !Game.creep[flag.memory.creep])){
+                    && (!flag.memory.creep || !Game.creeps[flag.memory.creep])){
                 return flag.name      
             }
         }

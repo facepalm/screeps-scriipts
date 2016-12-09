@@ -12,7 +12,7 @@
 (function () {
     
     var util = {};
-    var checkSite, partsList, findEnergy;
+    var checkSite, partsList;
     
     checkSite = function (pos, radius) {
         
@@ -22,24 +22,7 @@
             return existingsites.length + existingstruct.length + existingcreeps.length
         };
     
-    findEnergy = function (room){
-        /*//given a room, return list of energy sources, their locations and usable status
-        if (room.memory.deposits_timer < Game.time){
-            room.memory.deposits = {};
-            for (var a in room.memory.endpoints){
-                var accpt = Game.getObjectById(a)
-                if (accpt.structureType == STRUCTURE_CONTAINER || accpt.structureType == STRUCTURE_STORAGE){
-                    room.memory.deposits[a] = accpt.store[RESOURCE_ENERGY];
-                }
-                if (accpt.structureType == STRUCTURE_SPAWN){
-                    room.memory.deposits[a] = accpt.energy;
-                }
-                
-            }
-            
-            room.memory.deposits_timer = Game.time + 60; //check once a minute
-        }*/
-    }
+    
     
     partsList = function (spec, capacity){
         //given a unit specification, produces a list of parts that maximally uses specified capacity
@@ -100,8 +83,31 @@
     
     util.checkSite = checkSite;
     util.partsList = partsList;
-    util.findEnergy = findEnergy;
    
     module.exports.util = util;
     
 })();
+
+var findEnergy = function(room,amt){
+    //returns the best source of energy in the room, at least amt worth
+    
+    var elist = {}
+    
+    var nrg = creep.room.find(FIND_DROPPED_ENERGY);
+    if (nrg.length){
+        //go pick up the top of the list
+        var pckup = creep.pickup(nrg[0]);
+        if (pckup == ERR_NOT_IN_RANGE) {
+            creep.moveTo(nrg[0]);
+        }
+    }else{	            
+        for (var s in creep.room.memory.estorage){
+            var obj = Game.getObjectById(s);
+            var withd = creep.withdraw(obj,RESOURCE_ENERGY,50);
+            if (withd == ERR_NOT_IN_RANGE) {
+                creep.moveTo(obj);
+            }
+        }
+    }
+}
+
