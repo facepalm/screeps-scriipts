@@ -49,8 +49,14 @@
         if (spec == 'harvester'){
             //Harvester units have one move, one carry, and as many work as we can fit
             output.unshift(MOVE);
-            output.unshift(CARRY);
-            capacity -= 100;
+            //output.unshift(CARRY);
+            capacity -= 50;
+            //unit gets 1/5 of its capacity as MOVE parts (1/10 energy)
+            var movecap = Math.floor(capacity / 500)
+            for (var i =0;i < movecap;i+=1){
+                output.unshift(MOVE);
+                capacity -= 50;
+            }
             for (var i =0;i<capacity;i+=100){
                 output.unshift(WORK);
             }
