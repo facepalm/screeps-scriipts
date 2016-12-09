@@ -11,7 +11,7 @@ var roleHarvester = {
             var flag_nm = strat.findFlag(creep.room,'MINING');
             if (flag_nm){
                 creep.memory.flag = flag_nm;
-                flag.memory.creep = creep.name;
+                Game.flags[flag_nm].memory.creep = creep.name;
             }
         
         }
