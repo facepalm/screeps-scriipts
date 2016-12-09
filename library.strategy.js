@@ -19,16 +19,18 @@ var plantFlags = function (room) {
     //source points, one miner per source (inefficient at first, but quickly enough one creep will drain it)
     var sources = room.find(FIND_SOURCES);
     for (var s in sources){
-        
-        var objlist = room.lookAtArea(s.pos.y-1, s.pos.x-1, s.pos.y+1, s.pos.x+1, asArray=true);
+        var spos = sources[s].pos;
+        var objlist = room.lookAtArea(spos.y-1, spos.x-1, spos.y+1, spos.x+1, true);
         var currx = 0;
         var curry = 0;
         var currvalid = false;
+        
         for (var obj in objlist){
             if (obj['x'] != currx || obj['y'] != curry){
                 if (currvalid){
                     //we had a valid point
-                    room.createFlag(currx,curry,color=COLOR_YELLOW,secondaryColor=COLOR_YELLOW);
+                    console.log(obj['x']+ ' '+currx)
+                    room.createFlag(currx,curry,undefined,COLOR_YELLOW,COLOR_YELLOW);
                     break;
                 }else{
                     currvalid=true;
@@ -37,12 +39,14 @@ var plantFlags = function (room) {
             currx = obj['x'];
             curry = obj['y'];
             
-            if (obj['type'] == 'terrain' and obj['terrain'] != 'normal'){
+            
+            
+            if (obj['type'] == 'terrain' && obj['terrain'] != 'normal'){
                 //WILL NOT MINE FROM SWAMP.  This may not be a bad thing
                 currvalid = false;
             }else if (obj['type'] == 'structure'){
                 //no building on buildings, the can needs to go here
-                curr valid = false;
+                currvalid = false;
             }
             
         }
