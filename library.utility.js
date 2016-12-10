@@ -61,21 +61,22 @@
         }
         if (spec == 'worker_bee'){
             //Worker bees have a balanced mix of work, carry and move, to function as generalists
-           
-            for (var i =0;i<capacity;i+=200){
-                if (capacity - i >= 200){
+            var curcap = 0;
+            for (var i =0;i<capacity-200;i+=200){
                     output.unshift(CARRY);
                     output.unshift(WORK);
                     output.unshift(MOVE);
-                } else if (capacity - i >= 150){
-                    output.unshift(WORK);
-                    output.unshift(MOVE);
-                } else if (capacity - i >= 100){
-                    output.unshift(WORK);
-                } else if (capacity - i >= 50) output.unshift(MOVE);
+                    curcap += 200;
             }
+            if (capacity - curcap >= 150){
+                output.unshift(WORK);
+                output.unshift(MOVE);
+            } else if (capacity - curcap >= 100){
+                output.unshift(MOVE);
+                output.unshift(CARRY);
+            } else if (capacity - i >= 50) output.unshift(MOVE);            
         }
-        console.log(output);
+        console.log('New spec: ',output);
         return output;
         
     
