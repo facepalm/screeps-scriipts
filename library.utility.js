@@ -93,21 +93,51 @@ var findEnergy = function(room,amt){
     
     var elist = {}
     
-    var nrg = creep.room.find(FIND_DROPPED_ENERGY);
-    if (nrg.length){
+    var nrg = creep.room.find(FIND_DROPPED_ENERGY, {
+                        filter: function(res) { return res.amount >= amt; }
+                    });
+    if (for n in nrg){
         //go pick up the top of the list
-        var pckup = creep.pickup(nrg[0]);
-        if (pckup == ERR_NOT_IN_RANGE) {
-            creep.moveTo(nrg[0]);
-        }
-    }else{	            
-        for (var s in creep.room.memory.estorage){
-            var obj = Game.getObjectById(s);
-            var withd = creep.withdraw(obj,RESOURCE_ENERGY,50);
-            if (withd == ERR_NOT_IN_RANGE) {
-                creep.moveTo(obj);
+        elist[nrg[n].id].type = 'RESOURCE';
+        
+        //var pckup = creep.pickup(nrg[0]);
+        //if (pckup == ERR_NOT_IN_RANGE) {
+        //    creep.moveTo(nrg[0]);
+        //}
+    }        
+             
+    for (var s in creep.room.memory.estorage){
+        var obj = Game.getObjectById(s);
+        if (obj.structureType == STRUCTURE_CONTAINER || obj.structureType == STRUCTURE_STORAGE){
+            if (obj.store[RESOURCE_ENERGY] >= amt){
+                elist[nrg[n].id].type = 'STORE';
+            }
+        }else{
+            if (obj.energy >= amt){
+                elist[nrg[n].id].type = 'ENERGY';
             }
         }
     }
+    
+    for (var s in creep.room.memory.einputs){
+        var obj = Game.getObjectById(s);
+        if (obj.structureType == STRUCTURE_CONTAINER || obj.structureType == STRUCTURE_STORAGE){
+            if (obj.store[RESOURCE_ENERGY] >= amt){
+                elist[nrg[n].id].type = 'STORE';
+            }
+        }else{
+            if (obj.energy >= amt){
+                elist[nrg[n].id].type = 'ENERGY';
+            }
+        }
+    }
+    console.log(elist);
+    
+    //    var withd = creep.withdraw(obj,RESOURCE_ENERGY,50);
+    //    if (withd == ERR_NOT_IN_RANGE) {
+    //        creep.moveTo(obj);
+    //    }
+    //}
+    
 }
 

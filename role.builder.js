@@ -1,3 +1,5 @@
+var util = require('library.utility');
+
 var roleBuilder = {
 
     /** @param {Creep} creep **/
@@ -32,6 +34,8 @@ var roleBuilder = {
 	    }
 	    else {
 	        //if we aren't building, we must be fetching energy
+	        var elist = util.findEnergy(room, creep.carryCapacity);
+	        
 	        var nrg = creep.room.find(FIND_DROPPED_ENERGY);
 	        if (nrg.length){
 	            //go pick up the top of the list
