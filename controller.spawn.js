@@ -10,6 +10,7 @@
 
 
 var util = require('library.utility');
+var strat = require('library.strategy');
 
 var spawnController = {
 
@@ -20,10 +21,10 @@ var spawnController = {
         //check if we have energy to spawn something
         if (spawn.room.energyAvailable >= spawn.room.energyCapacityAvailable * 1.0){
             //okay, we're gonna spawn something.  Calculate ratios of need vs availabilty
-            var rmcreep = spawn.room.find(FIND_MY_CREEPS);
+            var rmcreeps = spawn.room.find(FIND_MY_CREEPS);
             
             var worker_need = spawn.room.memory.repair_level + spawn.room.memory.build_level + 1000;
-            var workers = _.filter(rmcreeps, (creep) => rmcreeps[creep].memory.role == 'worker_bee');
+            var workers = _.filter(rmcreeps, (creep) => creep.memory.role == 'worker_bee');
             var worker_availability = workers.reduce(function(a, b) {
                                           return a + b.hitsMax;
                                         }, 0);
@@ -31,14 +32,20 @@ var spawnController = {
             var ratio = {};
             ratio['worker_bee'] = (worker_need - worker_availability) / (worker_need + worker_availability + 1);
             
-            var harvesters = _.filter(rmcreeps, (creep) => rmcreeps[creep].memory.role == 'harvester');
+            var flag_hv = strat.findFlag(spawn.room,'MINING');
+            var harvesters = _.filter(rmcreeps, (creep) => creep.memory.role == 'harvester');
             var harvester_availability = harvesters.reduce(function(a, b) {
                                           return a + b.hitsMax;
                                         }, 0);
         
-            ratio['harvester'] = (1000 + spawn.room.memory.harvest_level - harvester_availability) / (300 + spawn.room.memory.harvest_level + harvester_availability + 1);
+            if (flag_hv){
+                ratio['harvester'] = (spawn.room.memory.mining_flags - harvesters.length) / (spawn.room.memory.mining_flags + harvesters.length);
+            }else{
+                //no mining spots in this room
+                ratio['harvester'] = -1;
+            }
             
-            var haulers = _.filter(rmcreeps, (creep) => rmcreeps[creep].memory.role == 'hauler');
+            var haulers = _.filter(rmcreeps, (creep) => creep.memory.role == 'hauler');
             var hauler_availability = haulers.reduce(function(a, b) {
                                           return a + b.hitsMax;
                                         }, 0);

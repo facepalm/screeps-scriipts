@@ -142,6 +142,7 @@ var findFlag = function(room,flagType){
     if (flagType == 'MINING'){
         //return EMPTY miner flag
         var flags = room.find(FIND_FLAGS);
+        room.memory.mining_flags = flags.length;
         for (var f in flags){
             var flag = flags[f];
             if (flag.color == COLOR_YELLOW && flag.secondaryColor == COLOR_YELLOW 
