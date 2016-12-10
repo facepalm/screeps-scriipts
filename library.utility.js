@@ -135,6 +135,7 @@ var findEnergy = function(room,amt){
     //        creep.moveTo(obj);
     //    }
     //}
+    return elist;
     
 }
 
