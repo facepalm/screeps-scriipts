@@ -37,7 +37,7 @@ var roleBuilder = {
 	        if (!creep.memory.esource){
 	            var elist = util.findEnergy(creep.room, creep.carryCapacity);
 	            
-	            if (elist.length){
+	            if (elist){
 	                var best_entry = undefined;
 	                var best_dist = 0;
 	                for (var e in elist){

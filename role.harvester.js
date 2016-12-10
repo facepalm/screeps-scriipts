@@ -27,13 +27,14 @@ var roleHarvester = {
                 //check for can
                 if (Game.time % 250 == 25){
                     var cons = creep.pos.lookFor(LOOK_CONSTRUCTION_SITES);
-                    var strc = creep.pos.findInRange(FIND_MY_STRUCTURES, 0, {
+                    var strc = creep.pos.findInRange(FIND_STRUCTURES, 0, {
                         filter: { structureType: STRUCTURE_CONTAINER }
                         });
                     
                     if (!cons.length && !strc.length){
                         creep.pos.createConstructionSite(STRUCTURE_CONTAINER);
                     }
+                    
                     if (strc.length){
                         creep.room.memory.einputs[strc[0].id] = true;
                     }
