@@ -52,7 +52,7 @@
         if (spec == 'hauler'){
             //Hauler units have equal move and carry
            
-            for (var i =0;i<capacity;i+=100){
+            for (var i =0;i<capacity-100;i+=100){
                 output.unshift(CARRY);
                 if (capacity - i >= 50) {
                     output.unshift(MOVE);    
@@ -60,7 +60,7 @@
             }
         }
         if (spec == 'worker_bee'){
-            //Worker bees have a blanced mix of work, carry and move, to function as generalists
+            //Worker bees have a balanced mix of work, carry and move, to function as generalists
            
             for (var i =0;i<capacity;i+=200){
                 if (capacity - i >= 200){
@@ -96,7 +96,7 @@ var findEnergy = function(room,amt){
     var nrg = creep.room.find(FIND_DROPPED_ENERGY, {
                         filter: function(res) { return res.amount >= amt; }
                     });
-    if (for n in nrg){
+    for (n in nrg){
         //go pick up the top of the list
         elist[nrg[n].id].type = 'RESOURCE';
         
