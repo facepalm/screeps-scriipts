@@ -32,10 +32,23 @@ var roleRepairer = {
             }
 	    }
 	    else {
-	        var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0]);
-            }
+	        //if we aren't repairing, we must be fetching energy
+	        if (!creep.memory.esource){                
+	            creep.memory.esource = util.findClosestEnergy(creep,creep.carryCapacity);             
+	        }
+	        if (creep.memory.esource){
+	            var obj = Game.getObjectById(creep.memory.esource);
+	            if (creep.pos.getRangeTo(obj) <= 1){
+	                if (obj.amount){
+	                    creep.pickup(obj);
+	                }else{
+	                    creep.withdraw(obj,RESOURCE_ENERGY,creep.carryCapacity);
+	                }
+	                creep.memory.esource = undefined;
+	            }else{
+	                var moved = creep.moveTo(obj);	                
+	            }
+	        }
 	    }
 	}
 };

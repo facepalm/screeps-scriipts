@@ -145,6 +145,24 @@ var findEnergy = function(room,amt){
     
 }
 
+var findClosestEnergy = function(creep,amt){
+    var rm = creep.room;
+    var elist = findEnergy(rm,amt);
+    if (!elist) return null;
+    
+    var best_entry = null;
+    var best_dist = 0;
+    for (var e in elist){
+        var this_dist = creep.pos.getRangeTo(Game.getObjectById(e));
+        if (this_dist < best_dist || !best_entry){
+            best_entry = e;
+            best_dist = this_dist;
+        }
+    }	                
+    return best_entry;
+}
+
 module.exports.findEnergy = findEnergy;
+module.exports.findCloseEnergy = findCloseEnergy;
 module.exports.terrainAt = terrainAt;
 

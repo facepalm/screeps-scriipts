@@ -34,21 +34,8 @@ var roleBuilder = {
 	    }
 	    else {
 	        //if we aren't building, we must be fetching energy
-	        if (!creep.memory.esource){
-	            var elist = util.findEnergy(creep.room, creep.carryCapacity);
-	            
-	            if (elist){
-	                var best_entry = undefined;
-	                var best_dist = 0;
-	                for (var e in elist){
-	                    var this_dist = creep.pos.getRangeTo(Game.getObjectById(e));
-	                    if (this_dist < best_dist || !best_entry){
-	                        best_entry = e;
-	                        best_dist = this_dist;
-	                    }
-	                }	                
-	                creep.memory.esource = best_entry;	                	                
-	            }
+	        if (!creep.memory.esource){                
+	            creep.memory.esource = util.findClosestEnergy(creep,creep.carryCapacity);             
 	        }
 	        if (creep.memory.esource){
 	            var obj = Game.getObjectById(creep.memory.esource);
