@@ -80,6 +80,57 @@ var plantFlags = function (room) {
             }
         }
     }
+    x=49;
+    for (y=0;y<50;y++){
+        var terrain = util.terrainAt(x,y,room);
+        if (terrain == 'plain'){
+            if (!start_flag){
+                start_flag = room.createFlag(x-1,y-1,undefined,COLOR_GREY,COLOR_RED);                
+            }
+        }else{
+            //wall
+            if(start_flag){
+                var end_flag = room.createFlag(x-1,y,undefined,COLOR_GREY,COLOR_BLUE);  
+                Game.flags[start_flag].memory.end = end_flag;
+                Game.flags[end_flag].memory.start = start_flag;
+                start_flag = undefined;
+            }
+        }
+    }
+    y=49;
+    for (x=49;x>=0;x--){
+        var terrain = util.terrainAt(x,y,room);
+        if (terrain == 'plain'){
+            if (!start_flag){
+                start_flag = room.createFlag(x+1,y-1,undefined,COLOR_GREY,COLOR_RED);                
+            }
+        }else{
+            //wall
+            if(start_flag){
+                var end_flag = room.createFlag(x,y-1,undefined,COLOR_GREY,COLOR_BLUE);  
+                Game.flags[start_flag].memory.end = end_flag;
+                Game.flags[end_flag].memory.start = start_flag;
+                start_flag = undefined;
+            }
+        }
+    }
+    x=0;
+    for (y=49;y>=0;y--){
+        var terrain = util.terrainAt(x,y,room);
+        if (terrain == 'plain'){
+            if (!start_flag){
+                start_flag = room.createFlag(x+1,y+1,undefined,COLOR_GREY,COLOR_RED);                
+            }
+        }else{
+            //wall
+            if(start_flag){
+                var end_flag = room.createFlag(x+1,y,undefined,COLOR_GREY,COLOR_BLUE);  
+                Game.flags[start_flag].memory.end = end_flag;
+                Game.flags[end_flag].memory.start = start_flag;
+                start_flag = undefined;
+            }
+        }
+    }
     
     //tower sites
     
