@@ -10,7 +10,7 @@ var roleUpgrader = {
             creep.say('harvesting');
 	    }
 	    if(!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
-	        creep.memory.workingg = true;
+	        creep.memory.working = true;
 	        creep.say('upgrading');
 	    }
 

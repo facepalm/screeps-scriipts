@@ -22,10 +22,11 @@ var spawnController = {
         if (spawn.room.energyAvailable >= spawn.room.energyCapacityAvailable * 1.0){
             //okay, we're gonna spawn something.  Calculate ratios of need vs availabilty
             var rmcreeps = spawn.room.find(FIND_MY_CREEPS);
+            var worker_mult = 4;
             
             var worker_need = spawn.room.memory.repair_level + spawn.room.memory.build_level + 1000;
             var workers = _.filter(rmcreeps, (creep) => creep.memory.role == 'worker_bee');
-            var worker_availability = workers.reduce(function(a, b) {
+            var worker_availability = worker_mult * workers.reduce(function(a, b) {
                                           return a + b.hitsMax;
                                         }, 0);
             console.log('worker availability',worker_availability);
@@ -39,10 +40,14 @@ var spawnController = {
                                         }, 0);
         
             if (flag_hv){
-                ratio['harvester'] = (spawn.room.memory.mining_flags - harvesters.length) / (spawn.room.memory.mining_flags + harvesters.length);
+                ratio['harvester'] = 0.8;//(spawn.room.memory.mining_flags - harvesters.length) / (spawn.room.memory.mining_flags + harvesters.length);
             }else{
                 //no mining spots in this room
-                ratio['harvester'] = -1;
+                if (Game.time < 5){
+                    ratio['harvester'] = 1;
+                }else{                
+                    ratio['harvester'] = -1;
+                }
             }
             
             var haulers = _.filter(rmcreeps, (creep) => creep.memory.role == 'hauler');
@@ -53,10 +58,11 @@ var spawnController = {
             ratio['hauler'] = (spawn.room.memory.hauler_level - hauler_availability) / (spawn.room.memory.hauler_level + hauler_availability + 1);
             
             //TODO: military
-            console.log(ratio['harvester'])
+            
             
             var role = 'none'; var role_v = -1;
             for (var r in ratio){
+                console.log('Spawn rating:',r, ratio[r])
                 if (ratio[r] >= role_v){
                     role = r;
                     role_v = ratio[r];
@@ -64,12 +70,15 @@ var spawnController = {
             }
             
             //var role 
-            var role_n = role;
-            var parts= util.util.partsList(role, spawn.room.energyAvailable)
+            if (role_v > 0){
+                var role_n = role;
+                var parts= util.util.partsList(role, spawn.room.energyAvailable)
 
-            var newName = spawn.createCreep(parts, undefined, {role: role_n});
-            console.log('Spawning new '+role_n+': ' + newName+' with priority '+role_v+ 'and body '+parts);
-        
+                var newName = spawn.createCreep(parts, undefined, {role: role_n});
+                console.log('Spawning new '+role_n+': ' + newName+' with priority '+role_v+ 'and body '+parts);
+            }else{
+                console.log('Spawning nothing due to lack of demand');
+            }
             
         }
         

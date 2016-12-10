@@ -42,7 +42,7 @@ var roleHauler = {
 	        }
 	    }else{
 	        if (!creep.memory.edest){   
-	            for (var s in room.memory.endpoints){
+	            for (var s in creep.room.memory.endpoints){
 	                if (creep.memory.edest) break;
                     var obj = Game.getObjectById(s);
                     var cap = 0;
@@ -52,11 +52,11 @@ var roleHauler = {
                     }else{
                         cap = obj.energyCapacity - obj.energy;
                     }
-                    if (cap > creep.carry.energy/2){
+                    if (cap > 0){
                         creep.memory.edest = s;
                     }
                 }
-                for (var s in room.memory.estorage){
+                for (var s in creep.room.memory.estorage){
 	                if (creep.memory.edest) break;
                     var obj = Game.getObjectById(s);
                     var cap = 0;
@@ -74,7 +74,14 @@ var roleHauler = {
 	        if (creep.memory.edest){
 	            var obj = Game.getObjectById(creep.memory.edest);
 	            if (creep.pos.getRangeTo(obj) <= 1){              
-                    creep.transfer(obj,RESOURCE_ENERGY,creep.carry.energy);
+                    var cap;
+	                if (obj.structureType == STRUCTURE_CONTAINER || obj.structureType == STRUCTURE_STORAGE){
+                        var total = _.sum(obj.store);
+                        cap = obj.storeCapacity - total;                        
+                    }else{
+                        cap = obj.energyCapacity - obj.energy;
+                    }
+                    creep.transfer(obj,RESOURCE_ENERGY,Math.min(creep.carry.energy,cap));
 	                creep.memory.edest = undefined;
 	            }else{
 	                var moved = creep.moveTo(obj);	                

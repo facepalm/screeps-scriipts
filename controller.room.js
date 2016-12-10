@@ -9,6 +9,7 @@
 
 var roleHarvester = require('role.harvester');
 var roleBee = require('role.worker_bee');
+var roleHauler = require('role.hauler');
 
 var builder = require('library.build');
 var util = require('library.utility');
@@ -245,6 +246,9 @@ var controllerRoom = {
             if(creep.memory.role == 'worker_bee') {
                 roleBee.run(creep);
                 
+            }
+            if (creep.memory.role == 'hauler'){
+                roleHauler.run(creep);
             }
             
     	}

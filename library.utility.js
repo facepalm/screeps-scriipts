@@ -52,7 +52,7 @@
         if (spec == 'hauler'){
             //Hauler units have equal move and carry
            
-            for (var i =0;i<capacity-100;i+=100){
+            for (var i =0;i<=capacity-100;i+=100){
                 output.unshift(CARRY);
                 if (capacity - i >= 50) {
                     output.unshift(MOVE);    
@@ -62,7 +62,7 @@
         if (spec == 'worker_bee'){
             //Worker bees have a balanced mix of work, carry and move, to function as generalists
             var curcap = 0;
-            for (var i =0;i<capacity-200;i+=200){
+            for (var i =0;i<=capacity-200;i+=200){
                     output.unshift(CARRY);
                     output.unshift(WORK);
                     output.unshift(MOVE);
