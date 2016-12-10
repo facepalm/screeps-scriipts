@@ -88,10 +88,10 @@
     
 })();
 
-var terrainAt(x,y,room){
+var terrainAt = function(x,y,room){
     var ter = room.lookForAt(LOOK_TERRAIN,x,y);
-    return ter[0]['terrain'];
-}
+    return ter[0];
+};
 
 var findEnergy = function(room,amt){
     //returns the best source of energy in the room, at least amt worth

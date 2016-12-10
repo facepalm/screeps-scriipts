@@ -9,7 +9,7 @@
 
 
 
-util = require('library.utility');
+var util = require('library.utility');
     
 var plantFlags = function (room) {
     //given a room to set up, establishes flags denoting locations of future behavior
@@ -63,19 +63,19 @@ var plantFlags = function (room) {
     //simple wall: just two flags denoting a straight wall to cover an entrance.
     var x = 0;
     var y = 0;
-    var start_flag = undefined;
+    var start_flag = undefined;    
     for (x=0;x<50;x++){
         var terrain = util.terrainAt(x,y,room);
         if (terrain == 'plain'){
             if (!start_flag){
-                start_flag = room.createFlag(x-1,y,undefined,COLOR_GREY,COLOR_RED);                
+                start_flag = room.createFlag(x-1,y+1,undefined,COLOR_GREY,COLOR_RED);                
             }
         }else{
             //wall
             if(start_flag){
-                var end_flag = room.createFlag(x,y,undefined,COLOR_GREY,COLOR_BLUE);  
-                start_flag.memory.end = end_flag.name;
-                end_flag.memory.start = start_flag.name
+                var end_flag = room.createFlag(x,y+1,undefined,COLOR_GREY,COLOR_BLUE);  
+                Game.flags[start_flag].memory.end = end_flag;
+                Game.flags[end_flag].memory.start = start_flag;
                 start_flag = undefined;
             }
         }
