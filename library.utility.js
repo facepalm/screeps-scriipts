@@ -163,6 +163,6 @@ var findClosestEnergy = function(creep,amt){
 }
 
 module.exports.findEnergy = findEnergy;
-module.exports.findCloseEnergy = findCloseEnergy;
+module.exports.findClosestEnergy = findClosestEnergy;
 module.exports.terrainAt = terrainAt;
 
