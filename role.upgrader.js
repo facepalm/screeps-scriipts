@@ -1,3 +1,5 @@
+var util = require('library.utility');
+
 var roleUpgrader = {
 
     /** @param {Creep} creep **/

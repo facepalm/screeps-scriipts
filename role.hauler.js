@@ -7,6 +7,8 @@
  * mod.thing == 'a thing'; // true
  */
 
+var util = require('library.utility');
+
 var roleHauler = {
 
     /** @param {Creep} creep **/
