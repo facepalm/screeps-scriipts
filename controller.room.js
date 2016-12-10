@@ -146,11 +146,11 @@ var controllerRoom = {
         
         if (Game.time % 120 == 0){
             //refresh extra energy points
-            var xtra_a = room.find(FIND_MY_STRUCTURES, { filter: (structure) => structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_STORAGE })
+            var xtra_a = room.find(FIND_MY_STRUCTURES, { filter: (structure) => structure.structureType == STRUCTURE_STORAGE })
             for (var a in xtra_a){
                 room.memory.estorage[xtra_a[a].id] = true;
             }
-            var xtra_a = room.find(FIND_MY_STRUCTURES, { filter: (structure) => structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_TOWER })
+            var xtra_a = room.find(FIND_MY_STRUCTURES, { filter: (structure) => structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_TOWER })
             for (var a in xtra_a){
                 room.memory.endpoints[xtra_a[a].id] = true;
             }
