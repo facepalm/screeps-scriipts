@@ -141,3 +141,5 @@ var findEnergy = function(room,amt){
     
 }
 
+module.exports.findEnergy = findEnergy;
+
