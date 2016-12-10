@@ -34,7 +34,36 @@ var roleBuilder = {
 	    }
 	    else {
 	        //if we aren't building, we must be fetching energy
-	        var elist = util.findEnergy(creep.room, creep.carryCapacity);
+	        if (!creep.memory.esource){
+	            var elist = util.findEnergy(creep.room, creep.carryCapacity);
+	            
+	            if (elist.length){
+	                var best_entry = undefined;
+	                var best_dist = 0;
+	                for (var e in elist){
+	                    var this_dist = creep.pos.getRangeTo(Game.getObjectById(e));
+	                    if (this_dist < best_dist || !best_entry){
+	                        best_entry = e;
+	                        best_dist = this_dist;
+	                    }
+	                }	                
+	                creep.memory.esource = best_entry;	                	                
+	            }
+	        }
+	        if (creep.memory.esource){
+	            var obj = Game.getObjectById(creep.memory.esource);
+	            if (creep.pos.getRangeTo(obj) <= 1){
+	                if (obj.amount){
+	                    creep.pickup(obj);
+	                }else{
+	                    creep.withdraw(obj,RESOURCE_ENERGY,creep.carryCapacity);
+	                }
+	                creep.memory.esource = undefined;
+	            }else{
+	                var moved = creep.moveTo(obj);	                
+	            }
+	        }
+	        /*
 	        
 	        var nrg = creep.room.find(FIND_DROPPED_ENERGY);
 	        if (nrg.length){
@@ -51,7 +80,7 @@ var roleBuilder = {
                         creep.moveTo(obj);
                     }
 	            }
-	        }
+	        }*/
 	    }
 	    return 1;
 	}
