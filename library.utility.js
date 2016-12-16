@@ -94,43 +94,49 @@ var terrainAt = function(x,y,room){
     return ter[0];
 };
 
-var findEnergy = function(room,amt){
+var findEnergy = function(room,amt, dropped, einputs, estorage, endpoints){
     //returns the best source of energy in the room, at least amt worth
     
     var elist = {}
     
-    var nrg = room.find(FIND_DROPPED_ENERGY, {
-                        filter: function(res) { return res.amount >= amt; }
-                    });
-    var nrg = room.find(FIND_DROPPED_ENERGY);
-    for (var n in nrg){
-        if (nrg[n].amount > amt){
-            elist[nrg[n].id] = 'RESOURCE';
-        }
-    }        
-             
-    for (var s in room.memory.estorage){
-        var obj = Game.getObjectById(s);
-        if (obj.structureType == STRUCTURE_CONTAINER || obj.structureType == STRUCTURE_STORAGE){
-            if (obj.store[RESOURCE_ENERGY] >= amt){
-                elist[obj.id] = 'STORE';
+    if (dropped){
+        var nrg = room.find(FIND_DROPPED_ENERGY, {
+                            filter: function(res) { return res.amount >= amt; }
+                        });
+        var nrg = room.find(FIND_DROPPED_ENERGY);
+        for (var n in nrg){
+            if (nrg[n].amount > amt){
+                elist[nrg[n].id] = 'RESOURCE';
             }
-        }else{
-            if (obj.energy >= amt){
-                elist[obj.id] = 'ENERGY';
+        }        
+    }
+    
+    if (estorage){         
+        for (var s in room.memory.estorage){
+            var obj = Game.getObjectById(s);
+            if (obj.structureType == STRUCTURE_CONTAINER || obj.structureType == STRUCTURE_STORAGE){
+                if (obj.store[RESOURCE_ENERGY] >= amt){
+                    elist[obj.id] = 'STORE';
+                }
+            }else{
+                if (obj.energy >= amt){
+                    elist[obj.id] = 'ENERGY';
+                }
             }
         }
     }
     
-    for (var s in room.memory.einputs){
-        var obj = Game.getObjectById(s);
-        if (obj.structureType == STRUCTURE_CONTAINER || obj.structureType == STRUCTURE_STORAGE){
-            if (obj.store[RESOURCE_ENERGY] >= amt){
-                elist[obj.id] = 'STORE';
-            }
-        }else{
-            if (obj.energy >= amt){
-                elist[obj.id] = 'ENERGY';
+    if (einputs){
+        for (var s in room.memory.einputs){
+            var obj = Game.getObjectById(s);
+            if (obj.structureType == STRUCTURE_CONTAINER || obj.structureType == STRUCTURE_STORAGE){
+                if (obj.store[RESOURCE_ENERGY] >= amt){
+                    elist[obj.id] = 'STORE';
+                }
+            }else{
+                if (obj.energy >= amt){
+                    elist[obj.id] = 'ENERGY';
+                }
             }
         }
     }
@@ -144,10 +150,11 @@ var findEnergy = function(room,amt){
     return elist;
     
 }
+module.exports.findEnergy = findEnergy;
 
-var findClosestEnergy = function(creep,amt){
+var findClosestEnergy = function(creep,amt, dropped, einputs, estorage, endpoints){
     var rm = creep.room;
-    var elist = findEnergy(rm,amt);
+    var elist = findEnergy(rm, amt, dropped, einputs, estorage, endpoints);
     if (!elist) return null;
     
     var best_entry = null;
@@ -162,7 +169,29 @@ var findClosestEnergy = function(creep,amt){
     return best_entry;
 }
 
-module.exports.findEnergy = findEnergy;
+
+var fetchEnergy = function(creep){
+    if (!creep.memory.esource){                
+        creep.memory.esource = findClosestEnergy(creep,creep.carryCapacity,true,true,true,false);             
+    }
+    if (creep.memory.esource){
+        var obj = Game.getObjectById(creep.memory.esource);
+        if (creep.pos.getRangeTo(obj) <= 1){
+            if (obj.amount){
+                creep.pickup(obj);
+            }else{
+                creep.withdraw(obj,RESOURCE_ENERGY, creep.carryCapacity - creep.carry.energy);
+            }
+            creep.memory.esource = undefined;
+        }else{
+            var moved = creep.moveTo(obj);	                
+        }
+    }
+}
+module.exports.fetchEenrgy = fetchEnergy;
+
+
 module.exports.findClosestEnergy = findClosestEnergy;
 module.exports.terrainAt = terrainAt;
+
 

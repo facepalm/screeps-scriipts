@@ -21,22 +21,7 @@ var roleUpgrader = {
         }
         else {
             //if we aren't upgrading, we must be fetching energy
-	        if (!creep.memory.esource){                
-	            creep.memory.esource = util.findClosestEnergy(creep,creep.carryCapacity);             
-	        }
-	        if (creep.memory.esource){
-	            var obj = Game.getObjectById(creep.memory.esource);
-	            if (creep.pos.getRangeTo(obj) <= 1){
-	                if (obj.amount){
-	                    creep.pickup(obj);
-	                }else{
-	                    creep.withdraw(obj,RESOURCE_ENERGY,creep.carryCapacity);
-	                }
-	                creep.memory.esource = undefined;
-	            }else{
-	                var moved = creep.moveTo(obj);	                
-	            }
-	        }
+	        util.fetchEnergy(creep);
         }
 	}
 };

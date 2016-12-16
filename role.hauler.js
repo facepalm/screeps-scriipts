@@ -25,7 +25,7 @@ var roleHauler = {
 
 	    if(!creep.memory.working) {
 	        if (!creep.memory.esource){                
-	            creep.memory.esource = util.findClosestEnergy(creep,creep.carryCapacity);             
+	            creep.memory.esource = util.findClosestEnergy(creep,creep.carryCapacity,true,true,false,false);             
 	        }
 	        if (creep.memory.esource){
 	            var obj = Game.getObjectById(creep.memory.esource);
