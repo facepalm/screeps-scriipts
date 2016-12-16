@@ -31,12 +31,16 @@ var roleRepairer = {
                 if(creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0]);
                 }
+            }else{
+                //nothing to repair; default to upgrading
+                return 0;
             }
 	    }
 	    else {
 	        //if we aren't repairing, we must be fetching energy
 	        util.fetchEnergy(creep);
 	    }
+	    return 1;
 	}
 };
 
