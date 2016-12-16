@@ -188,7 +188,7 @@ var fetchEnergy = function(creep){
         }
     }
 }
-module.exports.fetchEenrgy = fetchEnergy;
+module.exports.fetchEnergy = fetchEnergy;
 
 
 module.exports.findClosestEnergy = findClosestEnergy;
