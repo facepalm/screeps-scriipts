@@ -90,7 +90,7 @@ var util = require('library.utility');
     
 })();
 
-var findBuildSpot(room,x,y){
+var findBuildSpot= function(room,x,y){
     //facepalm template
     var offsets = [{x:-2,y:1},
                    {x:-2,y:2},
@@ -109,7 +109,8 @@ var findBuildSpot(room,x,y){
         } 
     }     
     return false;              
-}
+};
+module.exports.findBuildSpot = findBuildSpot;
 
 var dropBuilding = function(room,struct_type){
     //check existing build spots for free room
