@@ -103,6 +103,15 @@ var util = require('library.utility');
 })();
 
 
-
+var checkBuildable = function (room, x, y, dx, dy) {        
+    var stuff = room.lookAtArea(y-dy,x-dx,y+dy,x+dx,true);
+    for (var s in stuff){
+        if (stuff[s].type=='structure' || (stuff[s].type=='terrain' && stuff[s].terrain == 'wall') ){
+            return false;
+        }
+    }
+    return true;    
+};
+module.exports.checkBuildable = checkBuildable;
 
 

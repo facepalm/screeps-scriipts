@@ -10,6 +10,7 @@
 
 
 var util = require('library.utility');
+var build = require('library.build');
     
 var plantFlags = function (room) {
     //given a room to set up, establishes flags denoting locations of future behavior
@@ -169,6 +170,9 @@ var dropPlanningFlags = function(room){
     var y = 0;
     for (x=4;x<=44;x+=5){
         for (y=4;y<=44;y+=5){
+            if (build.checkBuildable(room,x,y,2)){
+                var flagname = room.createFlag(x,y,undefined,COLOR_GREY,COLOR_BLUE);    
+            }
             //check if 5x5 area clear
             //plant 'unrealized building site' flag
             /*var flagname = room.createFlag(x,y,undefined,COLOR_GREY,COLOR_GREY);
