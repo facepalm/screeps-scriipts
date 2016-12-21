@@ -1,4 +1,4 @@
-var flag = require('library.flag');
+var flag_lib = require('library.flag');
 
 var roleHarvester = {
 
@@ -7,8 +7,8 @@ var roleHarvester = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
-        if (!creep.memory.flag){
-            var flag_nm = flag.findFlag(creep.room,'MINING');
+        if (!creep.memory.flag){        
+            var flag_nm = flag_lib.findFlag(creep.room,'MINING');
             if (flag_nm){
                 creep.memory.flag = flag_nm;
                 Game.flags[flag_nm].memory.creep = creep.name;

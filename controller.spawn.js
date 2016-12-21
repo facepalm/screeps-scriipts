@@ -11,7 +11,7 @@
 
 var util = require('library.utility');
 var strat = require('library.strategy');
-var flag = require('library.flag');
+var flag_lib = require('library.flag');
 
 var spawnController = {
 
@@ -34,7 +34,7 @@ var spawnController = {
             var ratio = {};
             ratio['worker_bee'] = (worker_need - worker_availability) / (worker_need + worker_availability + 1);
             
-            var flag_hv = flag.findFlag(spawn.room,'MINING');
+            var flag_hv = flag_lib.findFlag(spawn.room,'MINING');
             var harvesters = _.filter(rmcreeps, (creep) => creep.memory.role == 'harvester');
             var harvester_availability = harvesters.reduce(function(a, b) {
                                           return a + b.hitsMax;
