@@ -116,7 +116,7 @@ var controllerRoom = {
                     
                     var unbuilt_extensions = room.find(FIND_CONSTRUCTION_SITES, {filter: function(site) {return site.structureType == STRUCTURE_EXTENSION;}});
                     if (extensions.length <  Math.max(0,5*(room.controller.level - 1), 10*(room.controller.level - 2)) ){
-                        builder.builder.dropBuilding(room,STRUCTURE_EXTENSION);
+                        builder.dropBuilding(room,STRUCTURE_EXTENSION);
                     }
                     
                 case 2:
@@ -131,7 +131,7 @@ var controllerRoom = {
                         if (util.util.checkSite(room.controller.pos,2) <= 1){
                             var site = builder.builder.findSite(room,room.controller.pos,1);
                             site.createConstructionSite(STRUCTURE_CONTAINER);
-                            builder.builder.buildSpurRoad(site);
+                            //builder.builder.buildSpurRoad(site);
                         }
                     }
             }

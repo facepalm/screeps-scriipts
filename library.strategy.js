@@ -11,6 +11,7 @@
 
 var util = require('library.utility');
 var build = require('library.build');
+var flag = require('library.flag');
     
 var plantFlags = function (room) {
     //given a room to set up, establishes flags denoting locations of future behavior
@@ -138,7 +139,7 @@ var plantFlags = function (room) {
     return true;  
 };
 
-var findFlag = function(room,flagType){
+/*var findFlag = function(room,flagType){
     //locates and returns a flag of the specified type
     if (flagType == 'MINING'){
         //return EMPTY miner flag
@@ -152,8 +153,14 @@ var findFlag = function(room,flagType){
             }
         }
     }
+    if (flagType == 'BUILDSPOT'){
+        
+    }
     return undefined;
 };
+module.exports.findFlag = findFlag;
+*/
+
     
 var test = function () {};    
     
@@ -161,28 +168,17 @@ var test = function () {};
     //strat.plantFlags = plantFlags;
       
 module.exports.plantFlags = plantFlags;
-module.exports.findFlag = findFlag;
 module.exports.test = test;
 
     
 var dropPlanningFlags = function(room){
     var x = 0;
     var y = 0;
-    for (x=5;x<=44;x+=7){
-        for (y=5;y<=44;y+=7){
-            if (build.checkBuildable(room,x,y,3,3)){
-                var flagname = room.createFlag(x,y,undefined,COLOR_GREY,COLOR_CYAN);    
+    for (x=4;x<=44;x+=5){
+        for (y=4;y<=44;y+=5){
+            if (build.checkBuildable(room,x,y,2,2)){
+                var flagname = room.createFlag(x,y,undefined,COLOR_GREY,COLOR_GREY);    
             }
-            //check if 5x5 area clear
-            //plant 'unrealized building site' flag
-            /*var flagname = room.createFlag(x,y,undefined,COLOR_GREY,COLOR_GREY);
-            //
-            var terrain = util.terrainAt(x,y,room);
-            if (terrain == 'wall'){
-                Game.flags[flagname].memory.wall = 9999999;
-            }else{
-                Game.flags[flagname].memory.wall = 0;                
-            }*/
         }
     }
     

@@ -1,4 +1,4 @@
-var strat = require('library.strategy');
+var flag = require('library.flag');
 
 var roleHarvester = {
 
@@ -8,7 +8,7 @@ var roleHarvester = {
     run: function(creep) {
 
         if (!creep.memory.flag){
-            var flag_nm = strat.findFlag(creep.room,'MINING');
+            var flag_nm = flag.findFlag(creep.room,'MINING');
             if (flag_nm){
                 creep.memory.flag = flag_nm;
                 Game.flags[flag_nm].memory.creep = creep.name;
@@ -45,34 +45,6 @@ var roleHarvester = {
             
             
         }
-        /*
-        var gotoSource = function(source){
-            
-            if (!source) return false;
-            var harv = creep.harvest(source);
-            if( harv == ERR_NOT_IN_RANGE) {
-                var check = creep.moveTo(source);
-                if (check == ERR_NO_PATH){
-                    return false;
-                }
-            }
-            return true;
-        }
-        
-	    
-        //go to cached source, if exists
-        if (! gotoSource(Game.getObjectById(creep.memory.source))) {
-            var sources = creep.room.find(FIND_SOURCES);
-            for (var s in sources){
-                var src = gotoSource(sources[s]);
-                creep.say(src)
-                if (src){
-                    creep.memory.source = sources[s].id;
-                    break;
-                }
-            }
-        }*/
-
 	}
 };
 

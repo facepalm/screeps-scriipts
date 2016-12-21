@@ -12,20 +12,8 @@ var util = require('library.utility');
 (function () {
     
     var builder = {};
-    var setupSource, dropBuilding, findSite, findBaseSite;
-    var buildSpurRoad;
-    
-    
-    
-    
-    dropBuilding = function(room,struct_type){
-        var _pos = findBaseSite(room);
-        if (_pos){
-            room.createConstructionSite(_pos,struct_type);
-            room.createConstructionSite(_pos.x+1,_pos.y,STRUCTURE_ROAD);
-            room.createConstructionSite(_pos.x,_pos.y+1,STRUCTURE_ROAD);
-        }
-    }
+    var setupSource, findSite, findBaseSite;
+    var buildSpurRoad;               
     
     buildSpurRoad = function(pos){
         var target = pos.findClosestByPath(FIND_MY_SPAWNS);
@@ -95,12 +83,46 @@ var util = require('library.utility');
     
     builder.buildSpurRoad = buildSpurRoad;
     
-    builder.dropBuilding = dropBuilding;
+    
 
     
     module.exports.builder = builder;
     
 })();
+
+var findBuildSpot(room,x,y){
+    //facepalm template
+    var offsets = [{x:-2,y:1},
+                   {x:-2,y:2},
+                   {x:2,y:1},
+                   {x:2,y:2},
+                   {x:-1,y:0},
+                   {x:1,y:0},
+                   {x:-1,y:-2},
+                   {x:0,y:-2},
+                   {x:1,y:-2}];
+    for (var o in offsets){
+        var tx = x + offsets[o].x;
+        var ty = y + offsets[o].y;
+        if (checkBuildable(room,tx,ty,0,0)){
+            return [tx,ty];
+        } 
+    }     
+    return false;              
+}
+
+var dropBuilding = function(room,struct_type){
+    //check existing build spots for free room
+        //get all 'existing build' flags
+        //
+    var _pos = findBaseSite(room);
+    if (_pos){
+        room.createConstructionSite(_pos,struct_type);
+        room.createConstructionSite(_pos.x+1,_pos.y,STRUCTURE_ROAD);
+        room.createConstructionSite(_pos.x,_pos.y+1,STRUCTURE_ROAD);
+    }
+};
+module.exports.dropBuilding = dropBuilding;
 
 
 var checkBuildable = function (room, x, y, dx, dy) {        
