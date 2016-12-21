@@ -22,6 +22,7 @@ var controllerRoom = {
     run: function(room) {
         
         if (!room.memory.planted){
+            strat.dropPlanningFlags(room);
             room.memory.planted = strat.plantFlags(room);
         }
         

@@ -162,4 +162,39 @@ var test = function () {};
 module.exports.plantFlags = plantFlags;
 module.exports.findFlag = findFlag;
 module.exports.test = test;
+
+    
+var dropPlanningFlags = function(room){
+    var x = 0;
+    var y = 0;
+    for (x=4;x<47;x++){
+        for (y=4;y<47;y++){
+            var flagname = room.createFlag(currx,y,undefined,COLOR_GRAY,COLOR_GRAY);
+            //
+            var terrain = util.terrainAt(x,y,room);
+            if (terrain == 'wall'){
+                Game.flags[flagname].memory.wall = 9999999;
+            }else{
+                Game.flags[flagname].memory.wall = 0;                
+            }
+        }
+    }
+    
+    for (x=4;x<47;x++){
+        for (y=4;y<47;y++){
+            var flag = room.lookForAt(x,y,LOOK_FLAGS);
+            if (flag && flag.memory.wall < 100){
+                var leftFlag = room.lookForAt(x+1,y,LOOK_FLAGS);
+                if (leftFlag && leftFlag.memory.wall < 100){
+                    leftFlag.memory.wall = Math.max(leftFlag.memory.wall, flag.memory.wall + 1);
+                }
+            }
+            //
+            
+        }
+    }
+    
+}
+module.exports.dropPlanningFlags = dropPlanningFlags;
+    
     
