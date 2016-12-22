@@ -127,7 +127,7 @@ var dropBuilding = function(room,struct_type){
     if (!spot){
         //no current spots avilable.  Promote new build spot
         var tar_flags = flag_lib.findAllFlags(room,'BUILDSPOT_INACTIVE');
-        if (tar_flag.length){
+        if (tar_flags.length){
             var targetflag = room.controller.pos.findClosestByRange(tar_flags);
             targetFlag.secondaryColor = COLOR_CYAN;
             var buildspot = findBuildSpot(room,targetflag.pos.x,targetflag.pos.y);
@@ -136,6 +136,7 @@ var dropBuilding = function(room,struct_type){
             }    
         }
     }
+    console.log(spot);
     if (spot){
         room.createConstructionSite(spot,struct_type);
     }

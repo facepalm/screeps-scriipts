@@ -25,7 +25,7 @@ var spawnController = {
             var rmcreeps = spawn.room.find(FIND_MY_CREEPS);
             var worker_mult = 4;
             
-            var worker_need = spawn.room.memory.repair_level + spawn.room.memory.build_level + 1000;
+            var worker_need = spawn.room.memory.repair_level + spawn.room.memory.build_level + 100;
             var workers = _.filter(rmcreeps, (creep) => creep.memory.role == 'worker_bee');
             var worker_availability = worker_mult * workers.reduce(function(a, b) {
                                           return a + b.hitsMax;
