@@ -20,12 +20,14 @@ var spawnController = {
         //console.log('parts test:',util.util.partsList('Harvester',550));
         
         //check if we have energy to spawn something
-        if (spawn.room.energyAvailable >= spawn.room.energyCapacityAvailable * 1.0){
+        if (Game.time % spawn.room.energyCapacityAvailable/50*3 == 0 && spawn.room.energyAvailable >= spawn.room.energyCapacityAvailable * 1.0){
             //okay, we're gonna spawn something.  Calculate ratios of need vs availabilty
             var rmcreeps = spawn.room.find(FIND_MY_CREEPS);
             var worker_mult = 4;
             
-            var worker_need = spawn.room.memory.repair_level + spawn.room.memory.build_level + 100;
+            //worker need is min of how much we have to build, and how much energy we have to build with
+            var worker_need = Math.min(spawn.room.memory.repair_level + spawn.room.memory.build_level, 
+                                        spawn.room.memory.store_enrgy + spawn.room.memory.dropped_enrgy) + 1;
             var workers = _.filter(rmcreeps, (creep) => creep.memory.role == 'worker_bee');
             var worker_availability = worker_mult * workers.reduce(function(a, b) {
                                           return a + b.hitsMax;

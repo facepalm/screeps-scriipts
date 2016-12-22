@@ -205,6 +205,7 @@ var controllerRoom = {
         var nrg = room.find(FIND_DROPPED_ENERGY);
         var tot_nrg = nrg.reduce(function(a, b) { return a + b.amount; }, 0);
         
+        room.memory.dropped_enrgy = tot_nrg;
         room.memory.harvest_level = room.memory.input_space + room.memory.store_space + room.memory.endpt_space;
         room.memory.hauler_level = Math.min(room.memory.input_enrgy, room.memory.store_space) + Math.min(room.memory.store_enrgy, room.memory.endpt_space) + tot_nrg;
         
