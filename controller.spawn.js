@@ -20,7 +20,7 @@ var spawnController = {
         //console.log('parts test:',util.util.partsList('Harvester',550));
         
         //check if we have energy to spawn something
-        if (Game.time % spawn.room.energyCapacityAvailable/50*3 == 0 && spawn.room.energyAvailable >= spawn.room.energyCapacityAvailable * 1.0){
+        if (Game.time % (spawn.room.energyCapacityAvailable/50*3 == 0) && spawn.room.energyAvailable >= spawn.room.energyCapacityAvailable * 1.0){
             //okay, we're gonna spawn something.  Calculate ratios of need vs availabilty
             var rmcreeps = spawn.room.find(FIND_MY_CREEPS);
             var worker_mult = 4;

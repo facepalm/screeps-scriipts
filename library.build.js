@@ -128,15 +128,15 @@ var dropBuilding = function(room,struct_type){
         //no current spots avilable.  Promote new build spot
         var tar_flags = flag_lib.findAllFlags(room,'BUILDSPOT_INACTIVE');
         if (tar_flags.length){
-            var targetflag = room.controller.pos.findClosestByRange(tar_flags);
-            targetFlag.secondaryColor = COLOR_CYAN;
-            var buildspot = findBuildSpot(room,targetflag.pos.x,targetflag.pos.y);
+            var targetFlag = room.controller.pos.findClosestByRange(tar_flags);
+            targetFlag.setColor(COLOR_GREY, COLOR_CYAN);
+            var buildspot = findBuildSpot(room,targetFlag.pos.x,targetFlag.pos.y);
             if (buildspot){
                 spot = buildspot;
             }    
         }
     }
-    console.log(spot);
+    //console.log(spot);
     if (spot){
         room.createConstructionSite(spot,struct_type);
     }
@@ -147,7 +147,7 @@ module.exports.dropBuilding = dropBuilding;
 var checkBuildable = function (room, x, y, dx, dy) {        
     var stuff = room.lookAtArea(y-dy,x-dx,y+dy,x+dx,true);
     for (var s in stuff){
-        if (stuff[s].type=='structure' || (stuff[s].type=='terrain' && stuff[s].terrain == 'wall') ){
+        if (stuff[s].type=='constructionSite' || stuff[s].type=='structure' || (stuff[s].type=='terrain' && stuff[s].terrain == 'wall') ){
             return false;
         }
     }

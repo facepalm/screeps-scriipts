@@ -207,7 +207,7 @@ var controllerRoom = {
         
         room.memory.dropped_enrgy = tot_nrg;
         room.memory.harvest_level = room.memory.input_space + room.memory.store_space + room.memory.endpt_space;
-        room.memory.hauler_level = Math.min(room.memory.input_enrgy, room.memory.store_space) + Math.min(room.memory.store_enrgy, room.memory.endpt_space) + tot_nrg;
+        room.memory.hauler_level = Math.min(room.memory.input_enrgy + tot_nrg, room.memory.store_space) + Math.min(room.memory.store_enrgy + tot_nrg, room.memory.endpt_space);
         
         //build priority
         room.memory.build_level = 0;
