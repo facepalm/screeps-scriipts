@@ -24,6 +24,7 @@ var controllerRoom = {
         if (!room.memory.planted){
             strat.dropPlanningFlags(room);
             room.memory.planted = strat.plantFlags(room);
+            builder.dropBuilding(STRUCTURE_CONTAINER);
         }
         
         /* start a timer to space out probably-expensive update operations */

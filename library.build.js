@@ -8,6 +8,7 @@
  */
 
 var util = require('library.utility');
+var flag_lib = require('library.flag');
 
 (function () {
     
@@ -105,22 +106,38 @@ var findBuildSpot= function(room,x,y){
         var tx = x + offsets[o].x;
         var ty = y + offsets[o].y;
         if (checkBuildable(room,tx,ty,0,0)){
-            return [tx,ty];
+            return room.getPositionAt(tx,ty);
         } 
     }     
-    return false;              
+    return null;              
 };
 module.exports.findBuildSpot = findBuildSpot;
 
 var dropBuilding = function(room,struct_type){
+    var spot = null;
     //check existing build spots for free room
         //get all 'existing build' flags
-        //
-    var _pos = findBaseSite(room);
-    if (_pos){
-        room.createConstructionSite(_pos,struct_type);
-        room.createConstructionSite(_pos.x+1,_pos.y,STRUCTURE_ROAD);
-        room.createConstructionSite(_pos.x,_pos.y+1,STRUCTURE_ROAD);
+    var cur_flags = flag_lib.findAllFlags(room,'BUILDSPOT_ACTIVE');
+    for (var c in cur_flags){
+        var buildspot = findBuildSpot(room,cur_flags[c].pos.x,cur_flags[c].pos.y);
+        if (buildspot){
+            spot = buildspot;
+        }
+    }
+    if (!spot){
+        //no current spots avilable.  Promote new build spot
+        var tar_flags = flag_lib.findAllFlags(room,'BUILDSPOT_INACTIVE');
+        if (tar_flag.length){
+            var targetflag = room.controller.pos.findClosestByRange(tar_flags);
+            targetFlag.secondaryColor = COLOR_CYAN;
+            var buildspot = findBuildSpot(room,targetflag.pos.x,targetflag.pos.y);
+            if (buildspot){
+                spot = buildspot;
+            }    
+        }
+    }
+    if (spot){
+        room.createConstructionSite(spot,struct_type);
     }
 };
 module.exports.dropBuilding = dropBuilding;
