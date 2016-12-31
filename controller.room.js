@@ -16,6 +16,8 @@ var util = require('library.utility');
 
 var strat = require('library.strategy');
 
+var flag_lib = require('library.flag');
+
 var controllerRoom = {
 
     /** @param {Room} room **/
@@ -25,6 +27,9 @@ var controllerRoom = {
             strat.dropPlanningFlags(room);
             room.memory.planted = strat.plantFlags(room);
             builder.dropBuilding(room,STRUCTURE_CONTAINER);
+            room.memory.strategic_role = 'PRIMARY BASE';
+            room.memory.need_cans = false;
+            room.memory.build_walls = false;
         }
         
         /* start a timer to space out probably-expensive update operations */
@@ -59,45 +64,85 @@ var controllerRoom = {
             /*Re-establish tech levels.  Issue build checks.*/
             var cont_lvl = room.controller.level;
             
-            if (room.memory.tech_level == 0){
-                /*
-                * At TL0, goal is to build a spawn
-                * Upgrade reqr: spawn
-                */
-                var targets = room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_SPAWN } });
-                if (targets.length > 0){
-                    room.memory.tech_level = 1;
+            if (room.memory.strategic_role == 'PRIMARY_BASE') {
+                //primary bases focus on building up extensions and harvesting ops
+                if (room.memory.tech_level == 0){
+                    /*
+                    * At TL0, goal is to build a spawn
+                    * Upgrade reqr: spawn
+                    */
+                    var targets = room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_SPAWN } });
+                    if (targets.length > 0){
+                        room.memory.tech_level = 1;
+                    }
                 }
-            }
-            if (room.memory.tech_level == 1){
-                /*
-                * At TL1, goal is to feed spawn and build route to source
-                * Upgrade reqr: container
-                */
-                var depositTargets = room.find(FIND_STRUCTURES, { filter: { structureType: STRUCTURE_CONTAINER } });
-                if (depositTargets.length > 0){
-                    room.memory.tech_level = 2;
+                if (room.memory.tech_level == 1){
+                    /*
+                    * At TL1, goal is to occupy source spots
+                    * Upgrade reqr: low harvest_level
+                    */
+                    //var depositTargets = room.find(FIND_STRUCTURES, { filter: { structureType: STRUCTURE_CONTAINER } });
+                    //if (depositTargets.length > 0){
+                    if (Game.time > 180 && !flag_lib.findFlag(room,'MINING')){
+                        room.memory.tech_level = 2;
+                    }
                 }
-            }
-            if (room.memory.tech_level == 2){
-                /*
-                * At TL2, goal is to upgrade controller, build acceptor container next to it.
-                * Upgrade reqr: controller lvl 2
-                */
-                if (room.controller.level > 1){
-                    room.memory.tech_level = 3;
+                if (room.memory.tech_level == 2){
+                    /*
+                    * At TL2, goal is to upgrade controller, build acceptor container next to it.
+                    * Upgrade reqr: controller lvl 2
+                    */
+                    if (room.controller.level > 1){
+                        room.memory.tech_level = 3;
+                    }
                 }
-            }
-            if (room.memory.tech_level == 3){
-                /*
-                * At TL3, goal is to build extensions, begin to differentiate creeps
-                * Upgrade reqr: co
-                */
-                var extensions = room.find(FIND_STRUCTURES, {
-                    filter: { structureType: STRUCTURE_EXTENSION }
-                });
-                if (room.controller.level > 2 && extensions.length >= 5){
-                    room.memory.tech_level = 4;
+                if (room.memory.tech_level == 3){
+                    /*
+                    * At TL3, goal is to build extensions, begin to differentiate creeps
+                    * Upgrade reqr: 5 extensions
+                    */
+                    var extensions = room.find(FIND_STRUCTURES, {
+                        filter: { structureType: STRUCTURE_EXTENSION }
+                    });
+                    if (room.controller.level > 2 && extensions.length >= 5){
+                        room.memory.tech_level = 4;
+                    }
+                }
+                if (room.memory.tech_level == 4){
+                    /*
+                    * At TL4, goal is to upgrade controller again
+                    * Upgrade reqr: controller lvl 3
+                    */
+                    if (room.controller.level > 2){
+                        room.memory.tech_level = 5;
+                    }
+                    
+                }
+                if (room.memory.tech_level == 5){
+                    /*
+                    * At TL5, goal is to build tower
+                    * Upgrade reqr: tower
+                    */
+                    var extensions = room.find(FIND_STRUCTURES, {
+                        filter: { structureType: STRUCTURE_TOWER }
+                    });
+                    if (extensions.length > 0){
+                        room.memory.tech_level = 6;
+                    }
+                    
+                }
+                if (room.memory.tech_level == 6){
+                    /*
+                    * At TL6, goal is to build add'l extensions
+                    * Upgrade reqr: 10 extensions
+                    */
+                    var extensions = room.find(FIND_STRUCTURES, {
+                        filter: { structureType: STRUCTURE_EXTENSION }
+                    });
+                    if (extensions.length >= 10){
+                        room.memory.tech_level++;
+                    }
+                    
                 }
             }
             //console.log('Current tech level:',room.memory.tech_level);
@@ -107,7 +152,21 @@ var controllerRoom = {
         var sites = room.find(FIND_CONSTRUCTION_SITES);
         if (sites.length < 6){
             switch(room.memory.tech_level){
-                
+                case 5:
+                    //tower
+                    var max_twrs = 0;
+                    switch(room.controller.level){
+                        case 8: max_twrs += 3;                        
+                        case 7: max_twrs += 1;
+                        case 5: max_twrs += 1;
+                        case 3: max_twrs += 1;                        
+                    }
+                    var twrs = room.find(FIND_STRUCTURES, {
+                            filter: function(structure) { return structure.structureType == STRUCTURE_TOWER; }
+                         });
+                    if (twrs.length < max_twrs){
+                        builder.dropBuilding(room,STRUCTURE_TOWER);
+                    }
                 case 3:
                     //check for new extensions
                     
