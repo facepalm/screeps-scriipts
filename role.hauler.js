@@ -84,7 +84,7 @@ var roleHauler = {
                     creep.transfer(obj,RESOURCE_ENERGY,Math.min(creep.carry.energy,cap));
 	                creep.memory.edest = undefined;
 	            }else{
-	                var moved = creep.moveTo(obj);	                
+	                var moved = creep.moveTo(obj,25);	                
 	            }
 	        }
 	    }	    

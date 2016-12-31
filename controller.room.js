@@ -27,7 +27,7 @@ var controllerRoom = {
             strat.dropPlanningFlags(room);
             room.memory.planted = strat.plantFlags(room);
             builder.dropBuilding(room,STRUCTURE_CONTAINER);
-            room.memory.strategic_role = 'PRIMARY BASE';
+            room.memory.strategic_role = 'PRIMARY_BASE';
             room.memory.need_cans = false;
             room.memory.build_walls = false;
         }
@@ -71,7 +71,7 @@ var controllerRoom = {
                     * At TL0, goal is to build a spawn
                     * Upgrade reqr: spawn
                     */
-                    var targets = room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_SPAWN } });
+                    var targets = room.find(FIND_STRUCTURES, { filter: { structureType: STRUCTURE_SPAWN } });
                     if (targets.length > 0){
                         room.memory.tech_level = 1;
                     }

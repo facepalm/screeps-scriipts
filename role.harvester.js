@@ -40,7 +40,7 @@ var roleHarvester = {
                     }
                 }
             }else{
-                creep.moveTo(flag);
+                creep.moveTo(flag,25);
             }
             
             
