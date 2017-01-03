@@ -25,13 +25,19 @@ var roleBuilder = {
 	        }
 	        if(creep.memory.target) {
 	            var build = creep.build(Game.constructionSites[creep.memory.target])
-                if(build == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(Game.constructionSites[creep.memory.target],{reusePath: 50});
-                }else{
-                    if (build){
-                        console.log('unusual build error returned: ' +build);
-                    }
-                }
+	            switch (build){
+	                case ERR_NOT_IN_RANGE:
+	                    creep.moveTo(Game.constructionSites[creep.memory.target],{reusePath: 50});
+	                    break;
+	                case ERR_INVALID_TARGET:
+	                    creep.memory.target = null;
+	                    return 0;
+	                case 0:
+	                    //worked fine
+	                    break
+	                default:
+	                    console.log('unusual build error returned: ' +build);
+	            }                
             }else{
                 //no target, apparently.  Return and try a different job
                 return 0;
