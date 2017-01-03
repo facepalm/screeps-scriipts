@@ -67,7 +67,7 @@ var spawnController = {
                                           return a + b.hitsMax;
                                         }, 0);
         
-            ratio['hauler'] = (spawn.room.memory.hauler_level+1 - hauler_availability) / (spawn.room.memory.hauler_level + hauler_availability + 1);
+            ratio['hauler'] = (spawn.room.memory.hauler_level+0.8 - hauler_availability) / (spawn.room.memory.hauler_level + hauler_availability + 1);
             
             //TODO: military
             
