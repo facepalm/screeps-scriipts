@@ -13,14 +13,23 @@ var util = require('library.utility');
 var strat = require('library.strategy');
 var flag_lib = require('library.flag');
 
+var force_spawn_interval = 180;
+
 var spawnController = {
 
     run: function(spawn) {
         
         //console.log('parts test:',util.util.partsList('Harvester',550));
+        var force = false;
+        if (!spawn.room.memory.force_spawn || Game.time > spawn.room.memory.force_spawn){
+            force = true;
+        }
         
-        //check if we have energy to spawn something
-        if (Game.time % (spawn.room.energyCapacityAvailable/50*3) == 0 && spawn.room.energyAvailable >= spawn.room.energyCapacityAvailable * 1.0){
+        //check if we have energy to spawn something (or are forced to try)
+        if (force || Game.time % (spawn.room.energyCapacityAvailable/50*3) == 0 && spawn.room.energyAvailable >= spawn.room.energyCapacityAvailable * 1.0){
+            
+            spawn.room.memory.force_spawn = Game.time + force_spawn_interval;
+            
             //okay, we're gonna spawn something.  Calculate ratios of need vs availabilty
             var rmcreeps = spawn.room.find(FIND_MY_CREEPS);
             var worker_mult = 4;
