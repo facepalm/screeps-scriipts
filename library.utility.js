@@ -76,6 +76,26 @@
                 output.unshift(CARRY);
             } else if (capacity - i >= 50) output.unshift(MOVE);            
         }
+        if (spec == 'upgrader'){
+            //Upgrader units are specialized for taking energy from a can next to the controller and upgrading it
+            output.unshift(MOVE);
+            output.unshift(CARRY);
+            capacity -= 100;
+            //unit gets 1/5 of its capacity as MOVE parts (1/10 energy)
+            var movecap = Math.floor(capacity / 500)
+            for (var i =0;i < movecap;i+=1){
+                output.unshift(MOVE);
+                capacity -= 50;
+            }
+            var workcap = capacity
+            for (var i =0;i<workcap-100;i+=100){
+                output.unshift(WORK);
+                capacity -= 100;                
+            }
+            if (capacity >= 50){
+                output.unshift(MOVE); //one last move if we have the juice
+            }
+        }
         console.log('New spec: ',output);
         return output;
         

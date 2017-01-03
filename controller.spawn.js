@@ -13,7 +13,7 @@ var util = require('library.utility');
 var strat = require('library.strategy');
 var flag_lib = require('library.flag');
 
-var force_spawn_interval = 180;
+var force_spawn_interval = 300; //time for a spawn to fill naturally
 
 var spawnController = {
 
@@ -22,6 +22,7 @@ var spawnController = {
         //console.log('parts test:',util.util.partsList('Harvester',550));
         var force = false;
         if (!spawn.room.memory.force_spawn || Game.time > spawn.room.memory.force_spawn){
+            console.log('No spawn tests for designated spawn interval. Trying to force something...');
             force = true;
         }
         
@@ -67,7 +68,7 @@ var spawnController = {
                                           return a + b.hitsMax;
                                         }, 0);
         
-            ratio['hauler'] = (spawn.room.memory.hauler_level+0.8 - hauler_availability) / (spawn.room.memory.hauler_level + hauler_availability + 1);
+            ratio['hauler'] = (spawn.room.memory.hauler_level+0.9 - hauler_availability) / (spawn.room.memory.hauler_level + hauler_availability + 1);
             
             //TODO: military
             
@@ -81,15 +82,33 @@ var spawnController = {
                 }
             }
             
-            //var role 
-            if (role_v > 0){
-                var role_n = role;
-                var parts= util.util.partsList(role, spawn.room.energyAvailable)
+            if (role_v < 0.5){
+                if (spawn.room.memory.upgrade_unit){
+                    //check if it's broken, delete it if so
+                    if(!Game.creeps[spawn.room.memory.upgrade_unit]) {
+                        spawn.room.memory.upgrade_unit = null;
+                    }
+                }
+                if (!spawn.room.memory.upgrade_unit){ //not an else, we might have cleared the var above
+                    var parts= util.util.partsList('upgrader', spawn.room.energyAvailable)
 
-                var newName = spawn.createCreep(parts, undefined, {role: role_n});
-                console.log('Spawning new '+role_n+': ' + newName+' with priority '+role_v+ 'and body '+parts);
-            }else{
-                console.log('Spawning nothing due to lack of demand');
+                    spawn.room.memory.upgrade_unit = spawn.createCreep(parts, undefined, {role: 'upgrader'});
+                    
+                    console.log('Spawning new upgrade bug: '+spawn.room.memory.upgrade_unit+'!');
+                }
+            
+            }else {
+            
+                //var role 
+                if (role_v > 0){
+                    var role_n = role;
+                    var parts= util.util.partsList(role, spawn.room.energyAvailable)
+
+                    var newName = spawn.createCreep(parts, undefined, {role: role_n});
+                    console.log('Spawning new '+role_n+': ' + newName+' with priority '+role_v+ 'and body '+parts);
+                }else{
+                    console.log('Spawning nothing due to lack of demand');
+                }
             }
             
         }
