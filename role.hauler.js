@@ -37,7 +37,7 @@ var roleHauler = {
 	                }
 	                creep.memory.esource = undefined;
 	            }else{
-	                var moved = creep.moveTo(obj);	                
+	                var moved = creep.moveTo(obj,{reusePath: 50});	                
 	            }
 	        }
 	    }else{

@@ -95,21 +95,21 @@ var spawnController = {
                     spawn.room.memory.upgrade_unit = spawn.createCreep(parts, undefined, {role: 'upgrader'});
                     
                     console.log('Spawning new upgrade bug: '+spawn.room.memory.upgrade_unit+'!');
+                    role_v = 0;
                 }
             
-            }else {
-            
-                //var role 
-                if (role_v > 0){
-                    var role_n = role;
-                    var parts= util.util.partsList(role, spawn.room.energyAvailable)
-
-                    var newName = spawn.createCreep(parts, undefined, {role: role_n});
-                    console.log('Spawning new '+role_n+': ' + newName+' with priority '+role_v+ 'and body '+parts);
-                }else{
-                    console.log('Spawning nothing due to lack of demand');
-                }
             }
+            
+            //var role 
+            if (role_v > 0){
+                var role_n = role;
+                var parts= util.util.partsList(role, spawn.room.energyAvailable)
+
+                var newName = spawn.createCreep(parts, undefined, {role: role_n});
+                console.log('Spawning new '+role_n+': ' + newName+' with priority '+role_v+ ' and body '+parts);
+            }else{
+                console.log('Spawning nothing due to lack of demand');
+            }            
             
         }
         
