@@ -35,7 +35,7 @@
             //output.unshift(CARRY);
             capacity -= 50;
             //unit gets 1/5 of its capacity as MOVE parts (1/10 energy)
-            var movecap = Math.floor(capacity / 500)
+            var movecap = Math.floor(capacity / 500) - 1; //the -1 because we already have one move
             for (var i =0;i < movecap;i+=1){
                 output.unshift(MOVE);
                 capacity -= 50;
@@ -82,7 +82,7 @@
             output.unshift(CARRY);
             capacity -= 100;
             //unit gets 1/5 of its capacity as MOVE parts (1/10 energy)
-            var movecap = Math.floor(capacity / 500)
+            var movecap = Math.floor(capacity / 500) - 1; //one move already
             for (var i =0;i < movecap;i+=1){
                 output.unshift(MOVE);
                 capacity -= 50;
