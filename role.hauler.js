@@ -24,7 +24,7 @@ var roleHauler = {
 	    }
 
 	    if(!creep.memory.working) {
-	        if (!creep.memory.esource){                
+	        if (!creep.memory.esource || !Game.getObjectById(creep.memory.esource)){                
 	            creep.memory.esource = util.findClosestEnergy(creep,creep.carryCapacity,true,true,false,false);             
 	        }
 	        if (creep.memory.esource){
@@ -41,6 +41,9 @@ var roleHauler = {
 	            }
 	        }
 	    }else{
+	        if (creep.memory.edest && !Game.getObjectById(creep.memory.edest)){
+	            creep.memory.edest = null;
+	        }
 	        if (!creep.memory.edest){   
 	            for (var s in creep.room.memory.endpoints){
 	                if (creep.memory.edest) break;
