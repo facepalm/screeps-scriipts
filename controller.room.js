@@ -141,7 +141,17 @@ var controllerRoom = {
                         filter: { structureType: STRUCTURE_EXTENSION }
                     });
                     if (extensions.length >= 10){
-                        room.memory.tech_level++;
+                        room.memory.tech_level=7;
+                    }
+                    
+                }
+                if (room.memory.tech_level == 7){
+                    /*
+                    * At TL7, goal is to upgrade controller again
+                    * Upgrade reqr: controller lvl 4
+                    */
+                    if (room.controller.level > 3){
+                        room.memory.tech_level = 8;
                     }
                     
                 }
