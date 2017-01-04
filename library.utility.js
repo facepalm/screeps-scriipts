@@ -69,7 +69,8 @@
                     curcap += 200;
             }
             if (capacity - curcap >= 150){
-                output.unshift(WORK);
+                output.unshift(CARRY);
+                output.unshift(CARRY);
                 output.unshift(MOVE);
             } else if (capacity - curcap >= 100){
                 output.unshift(MOVE);
@@ -191,7 +192,7 @@ var findClosestEnergy = function(creep,amt, dropped, einputs, estorage, endpoint
 
 
 var fetchEnergy = function(creep){
-    if (!creep.memory.esource){                
+    if (!creep.memory.esource || !Game.getObjectById(creep.memory.esource)){                
         creep.memory.esource = findClosestEnergy(creep,creep.carryCapacity,true,true,true,false);             
     }
     if (creep.memory.esource){
