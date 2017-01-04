@@ -88,7 +88,7 @@
                 capacity -= 50;
             }
             var workcap = capacity
-            for (var i =0;i<workcap-100;i+=100){
+            for (var i =0;i<=workcap-100;i+=100){
                 output.unshift(WORK);
                 capacity -= 100;                
             }

@@ -91,6 +91,18 @@ var flag_lib = require('library.flag');
     
 })();
 
+var dropPlanningFlags = function(room){
+    var x = 0;
+    var y = 0;
+    for (x=4;x<=44;x+=7){
+        for (y=4;y<=44;y+=7){
+            if (checkBuildable(room,x,y,2,2)){
+                var flagname = room.createFlag(x,y,undefined,COLOR_GREY,COLOR_GREY);    
+            }
+        }
+    }  
+};module.exports.dropPlanningFlags = dropPlanningFlags;
+
 var findBuildSpot= function(room,x,y){
     //facepalm template
     var offsets = [{x:-2,y:1},

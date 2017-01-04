@@ -25,7 +25,7 @@ var controllerRoom = {
     run: function(room) {
         
         if (!room.memory.planted){
-            flag_lib.dropPlanningFlags(room);
+            builder.dropPlanningFlags(room);
             room.memory.planted = flag_lib.plantFlags(room);
             builder.dropBuilding(room,STRUCTURE_CONTAINER);
             room.memory.strategic_role = 'PRIMARY_BASE';

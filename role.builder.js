@@ -16,10 +16,16 @@ var roleBuilder = {
 
 	    if(creep.memory.working) {
 	        if (!creep.memory.target || !Game.constructionSites[creep.memory.target]){
-	            //find a new target
-	            var targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
-	            if (targets){
-	                creep.memory.target = targets.id;
+	            //inherit room target if it exists
+	            if (creep.room.memory.build_target){
+	                creep.memory.target = creep.room.memory.build_target;
+	            }else{
+	                //find a new target, share with room
+	                var targets = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+	                if (targets){
+	                    creep.memory.target = targets.id;
+	                    creep.room.memory.build_target = targets.id;
+	                }
 	            }
             
 	        }
@@ -31,6 +37,7 @@ var roleBuilder = {
 	                    break;
 	                case ERR_INVALID_TARGET:
 	                    creep.memory.target = null;
+	                    creep.room.memory.build_target = null;
 	                    return 0;
 	                case 0:
 	                    //worked fine
