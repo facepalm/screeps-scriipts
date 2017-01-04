@@ -35,29 +35,38 @@
             //output.unshift(CARRY);
             capacity -= 50;
             //unit gets 1/5 of its capacity as MOVE parts (1/10 energy)
-            var movecap = Math.floor(capacity / 500) - 1; //the -1 because we already have one move
-            for (var i =0;i < movecap;i+=1){
-                output.unshift(MOVE);
-                capacity -= 50;
-            }
+            var movecap = Math.max(0,Math.floor(capacity / 500) - 1); //the -1 because we already have one move
+            capacity -= movecap*50;
+            
             var workcap = capacity
-            for (var i =0;i<workcap-100;i+=100){
+            for (var i =0;i<=workcap-100;i+=100){
                 output.unshift(WORK);
                 capacity -= 100;                
+            }
+            for (var i =0;i < movecap;i+=1){
+                output.unshift(MOVE);
             }
             if (capacity >= 50){
                 output.unshift(MOVE); //one last move if we have the juice
             }
         }
         if (spec == 'hauler'){
-            //Hauler units have equal move and carry
-           
-            for (var i =0;i<=capacity-100;i+=100){
+            //Hauler units have one move for each two carry
+            
+            for (var i =0;i<=capacity-150;i+=150){
                 output.unshift(CARRY);
-                if (capacity - i >= 50) {
-                    output.unshift(MOVE);    
-                }
+                output.unshift(CARRY);
+                output.unshift(MOVE);    
+                capacity -= 150;
             }
+            //we don't *really* need the following, I just like using all the energy
+            if (capacity > 100){
+                output.unshift(CARRY);
+                output.unshift(MOVE); 
+            }else if (capacity > 50){
+                output.unshift(MOVE); 
+            }
+            
         }
         if (spec == 'worker_bee'){
             //Worker bees have a balanced mix of work, carry and move, to function as generalists

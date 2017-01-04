@@ -167,6 +167,7 @@ var controllerRoom = {
                          });
                     if (twrs.length < max_twrs){
                         builder.dropBuilding(room,STRUCTURE_TOWER);
+                        //builder.dropBuilding(room,STRUCTURE_CONTAINER);
                     }
                 case 3:
                     //check for new extensions
