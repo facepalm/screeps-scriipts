@@ -1,6 +1,6 @@
 var flag_lib = require('library.flag');
 var util = require('library.utility');
-var builder = require('library.build')
+var builder = require('library.build');
 
 var roleHarvester = {
 

@@ -89,7 +89,7 @@ var buildSpurRoad = function(pos){
         target.room.createConstructionSite(path[e].x,path[e].y,STRUCTURE_ROAD);
         //}
     }
-}module.exports.buildSpurRoad = buildSpurRoad;
+};module.exports.buildSpurRoad = buildSpurRoad;
 
 var buildRoad = function(startPos,endPos){
     var path = startPos.findPathTo(endPos);
