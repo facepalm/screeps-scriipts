@@ -29,7 +29,7 @@ var roleRepairer = {
             });
             if(targets.length) {
                 if(creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
-                    util.creepMove(targets[0]);
+                    util.creepMove(creep,targets[0]);
                 }
             }else{
                 //nothing to repair; default to upgrading

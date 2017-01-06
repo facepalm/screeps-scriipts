@@ -37,7 +37,7 @@ var roleHauler = {
 	                }
 	                creep.memory.esource = undefined;
 	            }else{
-	                util.creepMove(obj);
+	                util.creepMove(creep,obj);
 	            }
 	        }
 	    }else{
@@ -87,7 +87,7 @@ var roleHauler = {
                     creep.transfer(obj,RESOURCE_ENERGY,Math.min(creep.carry.energy,cap));
 	                creep.memory.edest = undefined;
 	            }else{
-	                util.creepMove(obj);
+	                util.creepMove(creep,obj);
 	            }
 	        }
 	    }	    
