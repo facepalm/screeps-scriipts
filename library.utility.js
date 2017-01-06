@@ -51,17 +51,22 @@
             }
         }
         if (spec == 'hauler'){
-            //Hauler units have one move for each two carry
+            //Hauler units have one move for each three carry
             
-            for (var i =0;i<=capacity-150;i+=150){
+            for (var i =0;i<=capacity-200;i+=200){
+                output.unshift(CARRY);
                 output.unshift(CARRY);
                 output.unshift(CARRY);
                 output.unshift(MOVE);    
                 
             }
-            capacity = capacity % 150;
+            capacity = capacity % 200;
             //we don't *really* need the following, I just like using all the energy
-            if (capacity >= 100){
+            if (capacity >= 150){
+                output.unshift(CARRY);
+                output.unshift(CARRY);
+                output.unshift(MOVE); 
+            }else if (capacity >= 100){
                 output.unshift(CARRY);
                 output.unshift(MOVE); 
             }else if (capacity >= 50){
@@ -223,10 +228,10 @@ module.exports.fetchEnergy = fetchEnergy;
 
 var creepMove= function(creep,obj){
     var moved = creep.moveTo(obj,{reusePath: 50});
-    if (creep.memory._move.path == ""){
-        //bad move (no path, etc) -> turn down timer and retry in a bit
-        console.log ('Bad move detected! Move returned: '+moved);
-        creep.memory._move.time = Game.time + 10;
+    if (moved == ERR_NO_PATH){
+        //bad move (no path, etc) -> turn off reusing path
+        //console.log ('Bad move detected! Move returned: '+moved);
+        creep.memory._move.time = 0;
     }
     return moved;
 }

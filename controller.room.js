@@ -31,6 +31,7 @@ var controllerRoom = {
             room.memory.strategic_role = 'PRIMARY_BASE';
             room.memory.need_cans = false;
             room.memory.build_walls = false;
+            room.memory.build_idle = false;
         }
         
         /* start a timer to space out probably-expensive update operations */
@@ -113,9 +114,12 @@ var controllerRoom = {
                     /*
                     * At TL4, goal is to upgrade controller again
                     * Upgrade reqr: controller lvl 3
+                    * This will take a while, so we'll enable idle/vanity building
                     */
+                    room.memory.build_idle = true;
                     if (room.controller.level > 2){
                         room.memory.tech_level = 5;
+                        room.memory.build_idle = false;                        
                     }
                     
                 }
