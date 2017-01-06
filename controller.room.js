@@ -106,7 +106,7 @@ var controllerRoom = {
                     var extensions = room.find(FIND_STRUCTURES, {
                         filter: { structureType: STRUCTURE_EXTENSION }
                     });
-                    if (room.controller.level > 2 && extensions.length >= 5){
+                    if (room.controller.level >= 2 && extensions.length >= 5){
                         room.memory.tech_level = 4;
                     }
                 }

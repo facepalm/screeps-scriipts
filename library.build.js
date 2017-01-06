@@ -13,22 +13,7 @@ var flag_lib = require('library.flag');
 (function () {
     
     var builder = {};
-    var setupSource, findSite, findBaseSite;
-    var buildSpurRoad;               
-    
-    buildSpurRoad = function(pos){
-        var target = pos.findClosestByPath(FIND_MY_SPAWNS);
-        var path = pos.findPathTo(target);
-        for (var e in path){
-            var erything = target.room.lookAt(path[e].x,path[e].y);
-            if (erything.length == 1 && erything[0].terrain == 'plain'){
-                /*empty spot*/
-                target.room.createConstructionSite(path[e].x,path[e].y,STRUCTURE_ROAD);
-            }
-        }
-    }
-    
-    
+    var setupSource, findSite, findBaseSite;                            
     
     setupSource = function(source){
         /* TODO: cache processed sources and skip those */
@@ -82,16 +67,29 @@ var flag_lib = require('library.flag');
     
     builder.findSite = findSite;
     builder.findBaseSite = findBaseSite;
-    builder.setupSource = setupSource;
-    
-    builder.buildSpurRoad = buildSpurRoad;
-    
-    
-
+    builder.setupSource = setupSource;           
     
     module.exports.builder = builder;
     
 })();
+
+var buildSpurRoad = function(pos){
+    var target = pos.findClosestByPath(FIND_MY_SPAWNS,{ignoreCreeps:true});
+    if (!target) return 0;
+    var path = pos.findPathTo(target);
+    var skip=1;
+    for (var e in path){
+        if (skip > 0){
+            skip--;
+            continue;
+        }
+        //var erything = target.room.lookAt(path[e].x,path[e].y);
+        //if (erything.length == 1 && erything[0].terrain == 'plain'){
+            /*empty spot*/
+        target.room.createConstructionSite(path[e].x,path[e].y,STRUCTURE_ROAD);
+        //}
+    }
+}module.exports.buildSpurRoad = buildSpurRoad;
 
 var buildRoad = function(startPos,endPos){
     var path = startPos.findPathTo(endPos);
@@ -99,7 +97,7 @@ var buildRoad = function(startPos,endPos){
         //var erything = target.room.lookAt(path[e].x,path[e].y);
         //if (erything.length == 1 && erything[0].terrain == 'plain'){
             /*empty spot*/
-        target.room.createConstructionSite(path[e].x,path[e].y,STRUCTURE_ROAD);
+        Game.rooms[startPos.roomName].createConstructionSite(path[e].x,path[e].y,STRUCTURE_ROAD);
         //}
     }
 }; 

@@ -8,6 +8,7 @@ var roleUpgrader = {
         if(creep.memory.working && creep.carry.energy == 0) {
             creep.memory.working = false;
             creep.say('fetch nrg');
+            return 0; //we've finished an upgrade cycle
 	    }
 	    if(!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
 	        creep.memory.working = true;

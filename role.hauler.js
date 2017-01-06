@@ -91,8 +91,9 @@ var roleHauler = {
 	                creep.memory.edest = undefined;
 	            }else{	            
 	                util.creepMove(creep,obj);	
-	                if (creep.room.memory.build_idle && dropRd){
-	                    builder.buildRoad(creep.pos,obj.pos);
+	                if (creep.room.memory.build_idle){
+	                    //creep.room.createConstructionSite(creep,STRUCTURE_ROAD);
+	                    //builder.buildRoad(creep.pos,obj.pos);
 	                }   
 	            }
 	        }
