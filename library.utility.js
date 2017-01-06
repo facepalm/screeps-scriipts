@@ -57,13 +57,14 @@
                 output.unshift(CARRY);
                 output.unshift(CARRY);
                 output.unshift(MOVE);    
-                capacity -= 150;
+                
             }
+            capacity = capacity % 150;
             //we don't *really* need the following, I just like using all the energy
-            if (capacity > 100){
+            if (capacity >= 100){
                 output.unshift(CARRY);
                 output.unshift(MOVE); 
-            }else if (capacity > 50){
+            }else if (capacity >= 50){
                 output.unshift(MOVE); 
             }
             
@@ -220,6 +221,16 @@ var fetchEnergy = function(creep){
 }
 module.exports.fetchEnergy = fetchEnergy;
 
+var creepMove= function(creep,obj){
+    var moved = creep.moveTo(obj,{reusePath: 50});
+    if (creep.memory._move.path == ""){
+        //bad move (no path, etc) -> turn down timer and retry in a bit
+        console.log ('Bad move detected! Move returned: '+moved);
+        creep.memory._move.time = Game.time + 10;
+    }
+    return moved;
+}
+module.exports.creepMove = creepMove;
 
 module.exports.findClosestEnergy = findClosestEnergy;
 module.exports.terrainAt = terrainAt;
