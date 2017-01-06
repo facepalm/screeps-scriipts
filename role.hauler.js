@@ -8,6 +8,7 @@
  */
 
 var util = require('library.utility');
+var builder = require('library.build');
 
 var roleHauler = {
 
@@ -44,7 +45,9 @@ var roleHauler = {
 	        if (creep.memory.edest && !Game.getObjectById(creep.memory.edest)){
 	            creep.memory.edest = null;
 	        }
-	        if (!creep.memory.edest){   
+	        var dropRd = false;
+	        if (!creep.memory.edest){  
+	            dropRd = true; 
 	            for (var s in creep.room.memory.endpoints){
 	                if (creep.memory.edest) break;
                     var obj = Game.getObjectById(s);
@@ -74,7 +77,7 @@ var roleHauler = {
                     }
                 }
             }
-	        if (creep.memory.edest){
+	        if (creep.memory.edest){	            
 	            var obj = Game.getObjectById(creep.memory.edest);
 	            if (creep.pos.getRangeTo(obj) <= 1){              
                     var cap;
@@ -86,8 +89,11 @@ var roleHauler = {
                     }
                     creep.transfer(obj,RESOURCE_ENERGY,Math.min(creep.carry.energy,cap));
 	                creep.memory.edest = undefined;
-	            }else{
-	                util.creepMove(creep,obj);
+	            }else{	            
+	                util.creepMove(creep,obj);	
+	                if (creep.room.memory.build_idle && dropRd){
+	                    builder.buildRoad(creep.pos,obj.pos);
+	                }   
 	            }
 	        }
 	    }	    

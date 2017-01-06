@@ -28,6 +28,8 @@ var flag_lib = require('library.flag');
         }
     }
     
+    
+    
     setupSource = function(source){
         /* TODO: cache processed sources and skip those */
         var block = util.util.checkSite(source.pos,5);
@@ -90,6 +92,18 @@ var flag_lib = require('library.flag');
     module.exports.builder = builder;
     
 })();
+
+var buildRoad = function(startPos,endPos){
+    var path = startPos.findPathTo(endPos);
+    for (var e in path){
+        //var erything = target.room.lookAt(path[e].x,path[e].y);
+        //if (erything.length == 1 && erything[0].terrain == 'plain'){
+            /*empty spot*/
+        target.room.createConstructionSite(path[e].x,path[e].y,STRUCTURE_ROAD);
+        //}
+    }
+}; 
+module.exports.buildRoad = buildRoad;
 
 var dropPlanningFlags = function(room){
     var x = 0;
