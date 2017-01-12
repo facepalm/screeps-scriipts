@@ -53,14 +53,13 @@
         if (spec == 'hauler'){
             //Hauler units have one move for each three carry
             
-            for (var i =0;i<=capacity-200;i+=200){
-                output.unshift(CARRY);
+            for (var i =0;i<=capacity-150;i+=150){
                 output.unshift(CARRY);
                 output.unshift(CARRY);
                 output.unshift(MOVE);    
                 
             }
-            capacity = capacity % 200;
+            capacity = capacity % 150;
             //we don't *really* need the following, I just like using all the energy
             if (capacity >= 150){
                 output.unshift(CARRY);
