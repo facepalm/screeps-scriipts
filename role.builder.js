@@ -33,7 +33,7 @@ var roleBuilder = {
 	            var build = creep.build(Game.constructionSites[creep.memory.target])
 	            switch (build){
 	                case ERR_NOT_IN_RANGE:
-	                    creep.moveTo(Game.constructionSites[creep.memory.target],{reusePath: 50});
+	                    util.creepMove(creep,Game.constructionSites[creep.memory.target]);
 	                    break;
 	                case ERR_INVALID_TARGET:
 	                    creep.memory.target = null;
