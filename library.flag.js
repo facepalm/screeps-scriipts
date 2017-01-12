@@ -36,8 +36,7 @@ var plantFlags = function (room) {
             
             
             
-            if (obj['type'] == 'terrain' && obj['terrain'] != 'plain'){
-                //WILL NOT MINE FROM SWAMP.  This may not be a bad thing
+            if (obj['type'] == 'terrain' && (obj['terrain'] != 'plain' || obj['terrain'] != 'swamp')){
                 currvalid = false;
             }else if (obj['type'] == 'structure' || obj['type'] == 'source'){
                 //no building on buildings, the can needs to go here
@@ -60,12 +59,12 @@ var plantFlags = function (room) {
         var terrain = util.terrainAt(x,y,room);
         if (terrain == 'plain'){
             if (!start_flag){
-                start_flag = room.createFlag(x-1,y+2,undefined,COLOR_GREY,COLOR_RED);                
+                start_flag = room.createFlag(x-2,y+2,undefined,COLOR_GREY,COLOR_RED);                
             }
         }else{
             //wall
             if(start_flag){
-                var end_flag = room.createFlag(x,y+2,undefined,COLOR_GREY,COLOR_BLUE);  
+                var end_flag = room.createFlag(x+1,y+2,undefined,COLOR_GREY,COLOR_BLUE);  
                 Game.flags[start_flag].memory.end = end_flag;
                 Game.flags[end_flag].memory.start = start_flag;
                 start_flag = undefined;
@@ -77,12 +76,12 @@ var plantFlags = function (room) {
         var terrain = util.terrainAt(x,y,room);
         if (terrain == 'plain'){
             if (!start_flag){
-                start_flag = room.createFlag(x-2,y-1,undefined,COLOR_GREY,COLOR_RED);                
+                start_flag = room.createFlag(x-2,y-2,undefined,COLOR_GREY,COLOR_RED);                
             }
         }else{
             //wall
             if(start_flag){
-                var end_flag = room.createFlag(x-2,y,undefined,COLOR_GREY,COLOR_BLUE);  
+                var end_flag = room.createFlag(x-2,y+1,undefined,COLOR_GREY,COLOR_BLUE);  
                 Game.flags[start_flag].memory.end = end_flag;
                 Game.flags[end_flag].memory.start = start_flag;
                 start_flag = undefined;
@@ -94,12 +93,12 @@ var plantFlags = function (room) {
         var terrain = util.terrainAt(x,y,room);
         if (terrain == 'plain'){
             if (!start_flag){
-                start_flag = room.createFlag(x+1,y-2,undefined,COLOR_GREY,COLOR_RED);                
+                start_flag = room.createFlag(x+2,y-2,undefined,COLOR_GREY,COLOR_RED);                
             }
         }else{
             //wall
             if(start_flag){
-                var end_flag = room.createFlag(x,y-2,undefined,COLOR_GREY,COLOR_BLUE);  
+                var end_flag = room.createFlag(x-1,y-2,undefined,COLOR_GREY,COLOR_BLUE);  
                 Game.flags[start_flag].memory.end = end_flag;
                 Game.flags[end_flag].memory.start = start_flag;
                 start_flag = undefined;
@@ -111,12 +110,12 @@ var plantFlags = function (room) {
         var terrain = util.terrainAt(x,y,room);
         if (terrain == 'plain'){
             if (!start_flag){
-                start_flag = room.createFlag(x+2,y+1,undefined,COLOR_GREY,COLOR_RED);                
+                start_flag = room.createFlag(x+2,y+2,undefined,COLOR_GREY,COLOR_RED);                
             }
         }else{
             //wall
             if(start_flag){
-                var end_flag = room.createFlag(x+2,y,undefined,COLOR_GREY,COLOR_BLUE);  
+                var end_flag = room.createFlag(x+2,y-1,undefined,COLOR_GREY,COLOR_BLUE);  
                 Game.flags[start_flag].memory.end = end_flag;
                 Game.flags[end_flag].memory.start = start_flag;
                 start_flag = undefined;
