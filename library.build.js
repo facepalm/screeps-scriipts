@@ -70,7 +70,7 @@ var flag_lib = require('library.flag');
             var newpos = new RoomPosition(dx,dy,_pos.roomName);
             
             var erything = room.lookAt(newpos);
-            if (erything.length == 1 && erything[0].terrain == 'plain'){
+            if (erything.length == 1 && (erything[0].terrain == 'plain' || erything[0].terrain == 'swamp')){
                 /*empty spot*/
                 return newpos;
             }
