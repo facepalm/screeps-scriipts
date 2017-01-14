@@ -217,7 +217,7 @@ var controllerRoom = {
         var sites = room.find(FIND_CONSTRUCTION_SITES);
         if (sites.length < 6 && room.memory.build_queue.length > 0){
             //check if first entry is a priority job, or if we're idle building          
-            if (!room.memory.build_queue[0]).idle || room.build_idle){
+            if (!room.memory.build_queue[0].idle || room.build_idle){
                 var newsite = room.memory.build_queue.shift();
                 if (!newsite.pos){
                     builder.dropBuilding(newsite.struct_type);

@@ -75,6 +75,7 @@ var flag_lib = require('library.flag');
 
 var queueBuild = function(room,pos,struct_type,priority){
     var entry = { room: room.name, pos:pos, struct_type: struct_type, idle: true };
+    console.log('Enqueueing new building: '+entry);
     if (priority){
         entry.idle = false
         room.memory.build_queue.unshift(entry);
