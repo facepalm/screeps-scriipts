@@ -73,6 +73,18 @@ var flag_lib = require('library.flag');
     
 })();
 
+var queueBuild = function(room,pos,struct_type,priority){
+    var entry = { room: room.name, pos:pos, struct_type: struct_type, idle: true };
+    if (priority){
+        entry.idle = false
+        room.memory.build_queue.unshift(entry);
+    }else{
+        entry.idle = true
+        room.memory.build_queue.push(entry);
+    }
+    
+};module.exports.queueBuild = queueBuild;
+
 var buildSpurRoad = function(pos){
     var target = pos.findClosestByPath(FIND_MY_SPAWNS,{ignoreCreeps:true});
     if (!target) return 0;
@@ -138,7 +150,7 @@ var findBuildSpot= function(room,x,y){
 module.exports.findBuildSpot = findBuildSpot;
 
 var dropBuilding = function(room,struct_type){
-    var spot = null;
+    var spot = null;    
     //check existing build spots for free room
         //get all 'existing build' flags
     var cur_flags = flag_lib.findAllFlags(room,'BUILDSPOT_ACTIVE');
@@ -162,6 +174,7 @@ var dropBuilding = function(room,struct_type){
     }
     //console.log(spot);
     if (spot){
+        //queueBuild(room,spot,struct_type,priority)
         room.createConstructionSite(spot,struct_type);
     }
 };

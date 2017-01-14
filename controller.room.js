@@ -32,6 +32,8 @@ var controllerRoom = {
             room.memory.need_cans = false;
             room.memory.build_walls = false;
             room.memory.build_idle = false;
+            
+            room.memory.build_queue = [];
         }
         
         /* start a timer to space out probably-expensive update operations */
@@ -161,11 +163,7 @@ var controllerRoom = {
                 }
             }
             //console.log('Current tech level:',room.memory.tech_level);
-        }
-        
-        //check for and possibly drop new building sites
-        var sites = room.find(FIND_CONSTRUCTION_SITES);
-        if (sites.length < 6){
+            
             switch(room.memory.tech_level){
                 case 5:
                     //tower
@@ -180,7 +178,7 @@ var controllerRoom = {
                             filter: function(structure) { return structure.structureType == STRUCTURE_TOWER; }
                          });
                     if (twrs.length < max_twrs){
-                        builder.dropBuilding(room,STRUCTURE_TOWER);
+                        builder.dropBuilding(room,null,STRUCTURE_TOWER,true);
                         //builder.dropBuilding(room,STRUCTURE_CONTAINER);
                     }
                 case 3:
@@ -192,7 +190,7 @@ var controllerRoom = {
                     
                     var unbuilt_extensions = room.find(FIND_CONSTRUCTION_SITES, {filter: function(site) {return site.structureType == STRUCTURE_EXTENSION;}});
                     if (extensions.length <  Math.max(0,5*(room.controller.level - 1), 10*(room.controller.level - 2)) ){
-                        builder.dropBuilding(room,STRUCTURE_EXTENSION);
+                        builder.queueBuild(room,null,STRUCTURE_EXTENSION, true);
                     }
                     
                 case 2:
@@ -206,10 +204,26 @@ var controllerRoom = {
                         //drop new container
                         if (util.util.checkSite(room.controller.pos,2) <= 1){
                             var site = builder.builder.findSite(room,room.controller.pos,1);
-                            site.createConstructionSite(STRUCTURE_CONTAINER);
+                            builder.queueBuild(room,site,STRUCTURE_CONTAINER,true)
+                            //site.createConstructionSite(STRUCTURE_CONTAINER);
                             //builder.builder.buildSpurRoad(site);
                         }
                     }
+                //end cases                
+            }
+        }
+        
+        //check for and possibly drop new building sites
+        var sites = room.find(FIND_CONSTRUCTION_SITES);
+        if (sites.length < 6 && room.memory.build_queue.length > 0){
+            //check if first entry is a priority job, or if we're idle building          
+            if (!room.memory.build_queue[0]).idle || room.build_idle){
+                var newsite = room.memory.build_queue.shift();
+                if (!newsite.pos){
+                    builder.dropBuilding(newsite.struct_type);
+                }else{
+                    newsite.pos.createConstructionSite(newsite.struct_type);
+                }
             }
         }
         
