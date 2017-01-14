@@ -36,7 +36,7 @@ var plantFlags = function (room) {
             
             
             
-            if (obj['type'] == 'terrain' && (obj['terrain'] != 'plain' || obj['terrain'] != 'swamp')){
+            if (obj['type'] == 'terrain' && (obj['terrain'] == 'wall')){
                 currvalid = false;
             }else if (obj['type'] == 'structure' || obj['type'] == 'source'){
                 //no building on buildings, the can needs to go here

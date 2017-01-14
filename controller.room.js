@@ -204,7 +204,9 @@ var controllerRoom = {
                         //drop new container
                         if (util.util.checkSite(room.controller.pos,2) <= 1){
                             var site = builder.builder.findSite(room,room.controller.pos,1);
-                            builder.queueBuild(room,site,STRUCTURE_CONTAINER,true)
+                            if (site){
+                                builder.queueBuild(room,site,STRUCTURE_CONTAINER,true);
+                            }
                             //site.createConstructionSite(STRUCTURE_CONTAINER);
                             //builder.builder.buildSpurRoad(site);
                         }
