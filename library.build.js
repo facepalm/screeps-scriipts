@@ -116,6 +116,15 @@ var buildSpurRoad = function(pos){
     }
 };module.exports.buildSpurRoad = buildSpurRoad;
 
+var buildingCount = function(room,struct_type){
+    var existing = room.find(FIND_STRUCTURES, {
+                        filter: function(structure) { return structure.structureType == struct_type; }
+                    });                    
+    var unbuilt = room.find(FIND_CONSTRUCTION_SITES, {filter: function(site) {return site.structureType == struct_type;}});
+    return existing.length + unbuilt.length;
+}; 
+module.exports.buildingCount = buildingCount;
+
 var buildRoad = function(startPos,endPos){
     var path = startPos.findPathTo(endPos);
     for (var e in path){

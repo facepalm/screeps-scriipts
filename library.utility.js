@@ -32,23 +32,18 @@
         if (spec == 'harvester'){
             //Harvester units have one move, one carry, and as many work as we can fit
             output.unshift(MOVE);
-            //output.unshift(CARRY);
-            capacity -= 50;
-            //unit gets 1/5 of its capacity as MOVE parts (1/10 energy)
-            var movecap = Math.max(0,Math.floor(capacity / 500) - 1); //the -1 because we already have one move
-            capacity -= movecap*50;
-            
-            var workcap = capacity
-            for (var i =0;i<=workcap-100;i+=100){
-                output.unshift(WORK);
-                capacity -= 100;                
-            }
-            for (var i =0;i < movecap;i+=1){
+            output.unshift(CARRY);
+            capacity -= 100;
+            if (capacity > 350){ //if we're adding at least three more work, add a move
                 output.unshift(MOVE);
+                capacity -= 50;
             }
-            if (capacity >= 50){
-                output.unshift(MOVE); //one last move if we have the juice
+            if (capacity > 500) capacity = 500; //cap at 5 work to drain one node
+            while (capacity >= 100){
+                output.push(WORK);
+                capacity -= 100;
             }
+            
         }
         if (spec == 'hauler'){
             //Hauler units have one move for each three carry

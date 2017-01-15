@@ -174,22 +174,14 @@ var controllerRoom = {
                         case 5: max_twrs += 1;
                         case 3: max_twrs += 1;                        
                     }
-                    var twrs = room.find(FIND_STRUCTURES, {
-                            filter: function(structure) { return structure.structureType == STRUCTURE_TOWER; }
-                         });
-                    if (twrs.length < max_twrs){
+
+                    if (builder.buildingCount(room,STRUCTURE_TOWER) < max_twrs){
                         builder.queueBuild(room,null,STRUCTURE_TOWER,true);
                         //builder.dropBuilding(room,STRUCTURE_CONTAINER);
                     }
                 case 3:
-                    //check for new extensions
-                    
-                    var extensions = room.find(FIND_STRUCTURES, {
-                        filter: function(structure) { return structure.structureType == STRUCTURE_EXTENSION; }
-                    });
-                    
-                    var unbuilt_extensions = room.find(FIND_CONSTRUCTION_SITES, {filter: function(site) {return site.structureType == STRUCTURE_EXTENSION;}});
-                    if ((extensions.length + unbuilt_extensions.length) <  Math.max(0,5*(room.controller.level - 1), 10*(room.controller.level - 2)) ){
+                    //check for new extensions                                        
+                    if (builder.buildingCount(room,STRUCTURE_EXTENSION) <  Math.max(0,5*(room.controller.level - 1), 10*(room.controller.level - 2)) ){
                         builder.queueBuild(room,null,STRUCTURE_EXTENSION, true);
                     }
                     
