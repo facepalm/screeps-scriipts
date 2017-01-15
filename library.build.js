@@ -105,7 +105,7 @@ var buildSpurRoad = function(pos){
     if (!target) return 0;
     var path = pos.findPathTo(target,{ignoreCreeps: true});
     for (var e in path){
-        if (e == 0 ){//|| e == path.length-1){
+        if (e == -1 || e == path.length-1){
             continue;
         }
         //var erything = target.room.lookAt(path[e].x,path[e].y);
