@@ -79,7 +79,6 @@ var queueBuild = function(room,pos,struct_type,priority){
     if (pos){
         for (var r in room.memory.build_queue){
             var ro = room.memory.build_queue[r];
-            console.log(ro, ro.pos);
             if (ro.pos.isEqualTo(pos)){
                 build=false;
                 console.log('Build spot already queued '+entry);
@@ -87,7 +86,7 @@ var queueBuild = function(room,pos,struct_type,priority){
         }
     }
     if (build){
-        console.log('Enqueueing new building: '+entry);
+        console.log('Enqueueing new building: '+entry.struct_type);
         if (priority){
             entry.idle = false
             room.memory.build_queue.unshift(entry);
