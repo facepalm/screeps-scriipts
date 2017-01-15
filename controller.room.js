@@ -178,7 +178,7 @@ var controllerRoom = {
                             filter: function(structure) { return structure.structureType == STRUCTURE_TOWER; }
                          });
                     if (twrs.length < max_twrs){
-                        builder.dropBuilding(room,null,STRUCTURE_TOWER,true);
+                        builder.queueBuild(room,null,STRUCTURE_TOWER,true);
                         //builder.dropBuilding(room,STRUCTURE_CONTAINER);
                     }
                 case 3:
