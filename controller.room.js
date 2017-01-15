@@ -156,8 +156,10 @@ var controllerRoom = {
                     * At TL7, goal is to upgrade controller again
                     * Upgrade reqr: controller lvl 4
                     */
+                    room.memory.build_idle = true;
                     if (room.controller.level > 3){
                         room.memory.tech_level = 8;
+                        room.memory.build_idle = false;
                     }
                     
                 }
@@ -211,12 +213,12 @@ var controllerRoom = {
         var sites = room.find(FIND_CONSTRUCTION_SITES);
         if (sites.length < 6 && room.memory.build_queue.length > 0){
             //check if first entry is a priority job, or if we're idle building          
-            if (!room.memory.build_queue[0].idle || room.build_idle){                
+            if (!room.memory.build_queue[0].idle || room.memory.build_idle){                
                 var newsite = room.memory.build_queue.shift();
                 if (!newsite.pos){
                     builder.dropBuilding(room, newsite.struct_type);
                 }else{
-                    newsite.pos.createConstructionSite(newsite.struct_type);
+                    room.createConstructionSite(newsite.pos.x, newsite.pos.y,newsite.struct_type);
                 }
             }
         }
