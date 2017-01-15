@@ -17,7 +17,7 @@ var flag_lib = require('library.flag');
     
     setupSource = function(source){
         /* TODO: cache processed sources and skip those */
-        var block = util.util.checkSite(source.pos,5);
+        var block = util.checkSite(source.pos,5);
         if (block == 0){
             var buildpos = findSite(source.room,source.pos,1);
             if (buildpos){

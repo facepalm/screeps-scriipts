@@ -196,7 +196,7 @@ var controllerRoom = {
                         room.memory.estorage[cont_cont[0].id] = true;
                     }else{
                         //drop new container
-                        if (util.util.checkSite(room.controller.pos,2) <= 1){
+                        if (util.checkSite(room.controller.pos,2) <= 1){
                             var site = builder.builder.findSite(room,room.controller.pos,1);
                             if (site){
                                 builder.queueBuild(room,site,STRUCTURE_CONTAINER,true);

@@ -90,7 +90,7 @@ var spawnController = {
                     }
                 }
                 if (!spawn.room.memory.upgrade_unit){ //not an else, we might have cleared the var above
-                    var parts= util.util.partsList('upgrader', spawn.room.energyAvailable)
+                    var parts= util.partsList('upgrader', spawn.room.energyAvailable)
 
                     spawn.room.memory.upgrade_unit = spawn.createCreep(parts, undefined, {role: 'upgrader'});
                     
@@ -103,7 +103,7 @@ var spawnController = {
             //var role 
             if (role_v > 0){
                 var role_n = role;
-                var parts= util.util.partsList(role, spawn.room.energyAvailable)
+                var parts= util.partsList(role, spawn.room.energyAvailable)
 
                 var newName = spawn.createCreep(parts, undefined, {role: role_n});
                 console.log('Spawning new '+role_n+': ' + newName+' with priority '+role_v+ ' and body '+parts);

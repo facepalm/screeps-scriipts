@@ -8,116 +8,105 @@
  */
 
 
-
-(function () {
     
-    var util = {};
-    var checkSite, partsList;
+var checkSite = function (pos, radius) {
     
-    checkSite = function (pos, radius) {
-        
-            var existingsites = pos.findInRange(FIND_CONSTRUCTION_SITES,radius);
-            var existingstruct = pos.findInRange(FIND_STRUCTURES,radius);
-            var existingcreeps = pos.findInRange(FIND_HOSTILE_CREEPS,radius);
-            return existingsites.length + existingstruct.length + existingcreeps.length
-        };
+    var existingsites = pos.findInRange(FIND_CONSTRUCTION_SITES,radius);
+    var existingstruct = pos.findInRange(FIND_STRUCTURES,radius);
+    var existingcreeps = pos.findInRange(FIND_HOSTILE_CREEPS,radius);
+    return existingsites.length + existingstruct.length + existingcreeps.length
+};module.exports.checkSite = checkSite;
     
     
     
-    partsList = function (spec, capacity){
-        //given a unit specification, produces a list of parts that maximally uses specified capacity
-        
-        var output = [];
-        
-        if (spec == 'harvester'){
-            //Harvester units have one move, one carry, and as many work as we can fit
+var partsList = function (spec, capacity){
+    //given a unit specification, produces a list of parts that maximally uses specified capacity
+    
+    var output = [];
+    
+    if (spec == 'harvester'){
+        //Harvester units have one move, one carry, and as many work as we can fit
+        output.unshift(MOVE);
+        output.unshift(CARRY);
+        capacity -= 100;
+        if (capacity > 350){ //if we're adding at least three more work, add a move
             output.unshift(MOVE);
-            output.unshift(CARRY);
+            capacity -= 50;
+        }
+        if (capacity > 500) capacity = 500; //cap at 5 work to drain one node
+        while (capacity >= 100){
+            output.push(WORK);
             capacity -= 100;
-            if (capacity > 350){ //if we're adding at least three more work, add a move
-                output.unshift(MOVE);
-                capacity -= 50;
-            }
-            if (capacity > 500) capacity = 500; //cap at 5 work to drain one node
-            while (capacity >= 100){
-                output.push(WORK);
-                capacity -= 100;
-            }
-            
         }
-        if (spec == 'hauler'){
-            //Hauler units have one move for each three carry
-            
-            for (var i =0;i<=capacity-150;i+=150){
-                output.unshift(CARRY);
-                output.unshift(CARRY);
-                output.unshift(MOVE);    
-                
-            }
-            capacity = capacity % 150;
-            //we don't *really* need the following, I just like using all the energy
-            if (capacity >= 150){
-                output.unshift(CARRY);
-                output.unshift(CARRY);
-                output.unshift(MOVE); 
-            }else if (capacity >= 100){
-                output.unshift(CARRY);
-                output.unshift(MOVE); 
-            }else if (capacity >= 50){
-                output.unshift(MOVE); 
-            }
-            
-        }
-        if (spec == 'worker_bee'){
-            //Worker bees have a balanced mix of work, carry and move, to function as generalists
-            var curcap = 0;
-            for (var i =0;i<=capacity-200;i+=200){
-                    output.unshift(CARRY);
-                    output.unshift(WORK);
-                    output.unshift(MOVE);
-                    curcap += 200;
-            }
-            if (capacity - curcap >= 150){
-                output.unshift(CARRY);
-                output.unshift(CARRY);
-                output.unshift(MOVE);
-            } else if (capacity - curcap >= 100){
-                output.unshift(MOVE);
-                output.unshift(CARRY);
-            } else if (capacity - i >= 50) output.unshift(MOVE);            
-        }
-        if (spec == 'upgrader'){
-            //Upgrader units are specialized for taking energy from a can next to the controller and upgrading it
-            output.unshift(MOVE);
-            output.unshift(CARRY);
-            capacity -= 100;
-            //unit gets 1/5 of its capacity as MOVE parts (1/10 energy)
-            var movecap = Math.floor(capacity / 500) - 1; //one move already
-            for (var i =0;i < movecap;i+=1){
-                output.unshift(MOVE);
-                capacity -= 50;
-            }
-            var workcap = capacity
-            for (var i =0;i<=workcap-100;i+=100){
-                output.unshift(WORK);
-                capacity -= 100;                
-            }
-            if (capacity >= 50){
-                output.unshift(MOVE); //one last move if we have the juice
-            }
-        }
-        console.log('New spec: ',output);
-        return output;
         
-    
     }
+    if (spec == 'hauler'){
+        //Hauler units have one move for each three carry
+        
+        for (var i =0;i<=capacity-150;i+=150){
+            output.unshift(CARRY);
+            output.unshift(CARRY);
+            output.unshift(MOVE);    
+            
+        }
+        capacity = capacity % 150;
+        //we don't *really* need the following, I just like using all the energy
+        if (capacity >= 150){
+            output.unshift(CARRY);
+            output.unshift(CARRY);
+            output.unshift(MOVE); 
+        }else if (capacity >= 100){
+            output.unshift(CARRY);
+            output.unshift(MOVE); 
+        }else if (capacity >= 50){
+            output.unshift(MOVE); 
+        }
+        
+    }
+    if (spec == 'worker_bee'){
+        //Worker bees have a balanced mix of work, carry and move, to function as generalists
+        var curcap = 0;
+        for (var i =0;i<=capacity-200;i+=200){
+                output.unshift(CARRY);
+                output.unshift(WORK);
+                output.unshift(MOVE);
+                curcap += 200;
+        }
+        if (capacity - curcap >= 150){
+            output.unshift(CARRY);
+            output.unshift(CARRY);
+            output.unshift(MOVE);
+        } else if (capacity - curcap >= 100){
+            output.unshift(MOVE);
+            output.unshift(CARRY);
+        } else if (capacity - i >= 50) output.unshift(MOVE);            
+    }
+    if (spec == 'upgrader'){
+        //Upgrader units are specialized for taking energy from a can next to the controller and upgrading it
+        output.unshift(MOVE);
+        output.unshift(CARRY);
+        capacity -= 100;
+        //unit gets 1/5 of its capacity as MOVE parts (1/10 energy)
+        var movecap = Math.floor(capacity / 500) - 1; //one move already
+        for (var i =0;i < movecap;i+=1){
+            output.unshift(MOVE);
+            capacity -= 50;
+        }
+        var workcap = capacity
+        for (var i =0;i<=workcap-100;i+=100){
+            output.unshift(WORK);
+            capacity -= 100;                
+        }
+        if (capacity >= 50){
+            output.unshift(MOVE); //one last move if we have the juice
+        }
+    }
+    console.log('New spec: ',output);
+    return output;
     
-    util.checkSite = checkSite;
-    util.partsList = partsList;
-   
-    module.exports.util = util;
+
+};module.exports.partsList = partsList;
     
-})();
 
 var terrainAt = function(x,y,room){
     var ter = room.lookForAt(LOOK_TERRAIN,x,y);
@@ -214,7 +203,7 @@ var fetchEnergy = function(creep){
             }
             creep.memory.esource = undefined;
         }else{
-            var moved = creep.moveTo(obj);	                
+            var moved = creepMove(creep, obj);	                
         }
     }
 }
