@@ -35,16 +35,17 @@ var roleHarvester = {
                             });
                         
                         if (!cons.length && !strc.length){
-                            creep.pos.createConstructionSite(STRUCTURE_CONTAINER);
+                            builder.queueBuilding(creep.room,flag.pos,STRUCTURE_CONTAINER,false)
+                            //creep.pos.createConstructionSite(STRUCTURE_CONTAINER);
                         }
                         
                         if (strc.length){
                             creep.room.memory.einputs[strc[0].id] = true;
                         }
                     }
-                    if ( creep.room.build_idle ){
-                        builder.buildSpurRoad(creep.pos);
-                    }
+                    
+                    builder.buildSpurRoad(creep.pos);
+                    
                 }
             }else{
                 util.creepMove(creep,flag);

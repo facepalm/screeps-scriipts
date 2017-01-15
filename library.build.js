@@ -75,13 +75,26 @@ var flag_lib = require('library.flag');
 
 var queueBuild = function(room,pos,struct_type,priority){
     var entry = { room: room.name, pos:pos, struct_type: struct_type, idle: true };
-    console.log('Enqueueing new building: '+entry);
-    if (priority){
-        entry.idle = false
-        room.memory.build_queue.unshift(entry);
-    }else{
-        entry.idle = true
-        room.memory.build_queue.push(entry);
+    var build = true;
+    if (pos){
+        for (var r in room.memory.build_queue){
+            var ro = room.memory.build_queue[r];
+            console.log(ro, ro.pos);
+            if (ro.pos.isEqualTo(pos)){
+                build=false;
+                console.log('Build spot already queued '+entry);
+            }
+        }
+    }
+    if (build){
+        console.log('Enqueueing new building: '+entry);
+        if (priority){
+            entry.idle = false
+            room.memory.build_queue.unshift(entry);
+        }else{
+            entry.idle = true
+            room.memory.build_queue.push(entry);
+        }
     }
     
 };module.exports.queueBuild = queueBuild;
@@ -89,17 +102,15 @@ var queueBuild = function(room,pos,struct_type,priority){
 var buildSpurRoad = function(pos){
     var target = pos.findClosestByPath(FIND_MY_SPAWNS,{ignoreCreeps:true});
     if (!target) return 0;
-    var path = pos.findPathTo(target);
-    var skip=1;
+    var path = pos.findPathTo(target,{ignoreCreeps: true});
     for (var e in path){
-        if (skip > 0){
-            skip--;
+        if (e == 0 || e == path.length-1){
             continue;
         }
         //var erything = target.room.lookAt(path[e].x,path[e].y);
         //if (erything.length == 1 && erything[0].terrain == 'plain'){
             /*empty spot*/
-        target.room.createConstructionSite(path[e].x,path[e].y,STRUCTURE_ROAD);
+        queueBuild(target.room, target.room.getPositionAt(path[e].x,path[e].y),STRUCTURE_ROAD,false);
         //}
     }
 };module.exports.buildSpurRoad = buildSpurRoad;
