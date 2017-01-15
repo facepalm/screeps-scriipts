@@ -38,7 +38,7 @@ var roleBuilder = {
 	                case ERR_INVALID_TARGET:
 	                    creep.memory.target = null;
 	                    creep.room.memory.build_target = null;
-	                    return 0;
+	                    return 1;
 	                case 0:
 	                    //worked fine
 	                    break

@@ -37,7 +37,7 @@ var roleBee = {
         if (creep.memory.subrole == REPAIR){
             var status = roleRepairer.run(creep);
             if (status == 0) {
-                creep.memory.subrole = UPGRADE;
+                creep.memory.subrole = BUILD;
             }
         }
         
