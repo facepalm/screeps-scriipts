@@ -86,8 +86,13 @@ var queueBuild = function(room,pos,struct_type,priority){
                 }
             }
         }
+        if (util.checkSite(pos,0)){
+            build = false;
+        }
     }
+    
     if (build){
+        
         console.log('Enqueueing new building: '+entry.struct_type);
         if (priority){
             entry.idle = false
