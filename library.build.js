@@ -142,16 +142,34 @@ var buildRoad = function(startPos,endPos){
 }; 
 module.exports.buildRoad = buildRoad;
 
-var dropPlanningFlags = function(room){
+var countPlanningFlags = function(room){
     var x = 0;
     var y = 0;
+    var num_flags=0;
     for (x=5;x<=44;x+=7){
         for (y=5;y<=44;y+=7){
-            if (checkBuildable(room,x,y,2,2)){
-                var flagname = room.createFlag(x,y,undefined,COLOR_GREY,COLOR_GREY);    
+            if (checkBuildable(room,x,y,2,2)){                 
+                num_flags++;
             }
         }
     }  
+    return num_flags;
+};module.exports.countPlanningFlags = countPlanningFlags;
+
+var dropPlanningFlags = function(room){
+    var x = 0;
+    var y = 0;
+    var num_flags=0;
+    for (x=5;x<=44;x+=7){
+        for (y=5;y<=44;y+=7){
+            //TODO look for building flags already placed too closely    && room.getPosition(x,y).findInRange
+            if (checkBuildable(room,x,y,2,2)){
+                var flagname = room.createFlag(x,y,undefined,COLOR_GREY,COLOR_GREY);    
+                num_flags++;
+            }
+        }
+    }  
+    return num_flags;
 };module.exports.dropPlanningFlags = dropPlanningFlags;
 
 var findBuildSpot= function(room,x,y){

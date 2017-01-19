@@ -10,10 +10,25 @@
 
 
 var util = require('library.utility');
-var build = require('library.build');
-var flag = require('library.flag');
+var builder = require('library.build');
+var flag_lib = require('library.flag');
     
-
+if (!Memory.plan){
+    Memory.plan = {room:{}};
+}
+    
+var initRoom = function(room){
+    if (!room.memory.initialized){ //TODO eventually handle reinitializations
+        room.memory.initialized = true;
+        Memory.plan.room[room.name] = {};            
+        Memory.plan.room[room.name].spot_build = builder.countPlanningFlags(room);    
+        Memory.plan.room[room.name].spot_mine = room.find(FIND_SOURCES).length;
+        
+        Memory.plan.room[room.name].role = 'PRIMARY_BASE';
+        Memory.plan.room[room.name].need_cans = false;
+        Memory.plan.room[room.name].build_walls = false;
+    }
+}
 
 /*var findFlag = function(room,flagType){
     //locates and returns a flag of the specified type
