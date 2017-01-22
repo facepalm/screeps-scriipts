@@ -189,7 +189,7 @@ module.exports.findFlag = findFlag;
 var findFlagsNear = function(pos,range,flagType){
     if (!range){ range = 0; }
     var locflags = pos.findInRange(FIND_FLAGS,range);
-    if (!flagtype || locflags.length == 0){
+    if (!flagType || locflags.length == 0){
         return locflags;
     }
     currentFlagFilter = flagType;

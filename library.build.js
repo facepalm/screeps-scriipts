@@ -170,7 +170,7 @@ var dropPlanningFlags = function(room){
             }
         }
     }
-    for (x=8;x<=44;x+=6){
+    /*for (x=8;x<=44;x+=6){
         for (y=8;y<=44;y+=6){
             //TODO look for building flags already placed too closely    && room.getPosition(x,y).findInRange
             var tp = room.getPositionAt(x,y);
@@ -179,7 +179,7 @@ var dropPlanningFlags = function(room){
                 num_flags++;
             }
         }
-    }  
+    } */ 
     return num_flags;
 };module.exports.dropPlanningFlags = dropPlanningFlags;
 
