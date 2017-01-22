@@ -139,7 +139,7 @@ var plantFlags = function (room) {
 module.exports.plantFlags = plantFlags;
 
 var currentFlagFilter = '';
-var flagFilter(flag){
+var flagFilter = function(flag){
     if (!flag){ //TODO return false if not a flag
         return false;
     }
