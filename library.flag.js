@@ -3,6 +3,15 @@
 var util = require('library.utility');
 //var build = require('library.build');
 
+var plantFlag = function(pos,name,color,secolor){
+    //check that there's not already a flag here
+    var locflags = pos.findInRange(FIND_FLAGS,0);
+    if (!locflags.length){
+        return pos.createFlag(name,color,secolor); //TODO check for flag planting errors
+    }
+    return undefined;
+};module.exports.plantFlag = plantFlag;
+
 var plantFlags = function (room) {
     //given a room to set up, establishes flags denoting locations of future behavior
     
@@ -23,8 +32,8 @@ var plantFlags = function (room) {
                 if (currvalid){
                     //we had a valid point
                     console.log(obj['x']+ ' '+currx)
-                    var flagname = room.createFlag(currx,curry,undefined,COLOR_YELLOW,COLOR_YELLOW);
-                    Game.flags[flagname].memory.source = sources[s].id;
+                    var flagname = plantFlag(room.getPositionAt(currx,curry),undefined,COLOR_YELLOW,COLOR_YELLOW);
+                    if (flagname){ Game.flags[flagname].memory.source = sources[s].id;}
                     
                     break;
                 }else{
@@ -59,12 +68,12 @@ var plantFlags = function (room) {
         var terrain = util.terrainAt(x,y,room);
         if (terrain == 'plain'){
             if (!start_flag){
-                start_flag = room.createFlag(x-2,y+2,undefined,COLOR_GREY,COLOR_RED);                
+                start_flag = plantFlag(room.getPositionAt(x-2,y+2),undefined,COLOR_GREY,COLOR_RED);                
             }
         }else{
             //wall
             if(start_flag){
-                var end_flag = room.createFlag(x+1,y+2,undefined,COLOR_GREY,COLOR_BLUE);  
+                var end_flag = plantFlag(room.getPositionAt(x+1,y+2),undefined,COLOR_GREY,COLOR_BLUE);  
                 Game.flags[start_flag].memory.end = end_flag;
                 Game.flags[end_flag].memory.start = start_flag;
                 start_flag = undefined;
@@ -76,12 +85,12 @@ var plantFlags = function (room) {
         var terrain = util.terrainAt(x,y,room);
         if (terrain == 'plain'){
             if (!start_flag){
-                start_flag = room.createFlag(x-2,y-2,undefined,COLOR_GREY,COLOR_RED);                
+                start_flag = plantFlag(room.getPositionAt(x-2,y-2),undefined,COLOR_GREY,COLOR_RED);                
             }
         }else{
             //wall
             if(start_flag){
-                var end_flag = room.createFlag(x-2,y+1,undefined,COLOR_GREY,COLOR_BLUE);  
+                var end_flag = plantFlag(room.getPositionAt(x-2,y+1),undefined,COLOR_GREY,COLOR_BLUE);  
                 Game.flags[start_flag].memory.end = end_flag;
                 Game.flags[end_flag].memory.start = start_flag;
                 start_flag = undefined;
@@ -93,12 +102,12 @@ var plantFlags = function (room) {
         var terrain = util.terrainAt(x,y,room);
         if (terrain == 'plain'){
             if (!start_flag){
-                start_flag = room.createFlag(x+2,y-2,undefined,COLOR_GREY,COLOR_RED);                
+                start_flag = plantFlag(room.getPositionAt(x+2,y-2),undefined,COLOR_GREY,COLOR_RED);                
             }
         }else{
             //wall
             if(start_flag){
-                var end_flag = room.createFlag(x-1,y-2,undefined,COLOR_GREY,COLOR_BLUE);  
+                var end_flag = plantFlag(room.getPositionAt(x-1,y-2),undefined,COLOR_GREY,COLOR_BLUE);  
                 Game.flags[start_flag].memory.end = end_flag;
                 Game.flags[end_flag].memory.start = start_flag;
                 start_flag = undefined;
@@ -110,12 +119,12 @@ var plantFlags = function (room) {
         var terrain = util.terrainAt(x,y,room);
         if (terrain == 'plain'){
             if (!start_flag){
-                start_flag = room.createFlag(x+2,y+2,undefined,COLOR_GREY,COLOR_RED);                
+                start_flag = plantFlag(room.getPositionAt(x+2,y+2),undefined,COLOR_GREY,COLOR_RED);                
             }
         }else{
             //wall
             if(start_flag){
-                var end_flag = room.createFlag(x+2,y-1,undefined,COLOR_GREY,COLOR_BLUE);  
+                var end_flag = plantFlag(room.getPositionAt(x+2,y-1),undefined,COLOR_GREY,COLOR_BLUE);  
                 Game.flags[start_flag].memory.end = end_flag;
                 Game.flags[end_flag].memory.start = start_flag;
                 start_flag = undefined;
@@ -129,8 +138,35 @@ var plantFlags = function (room) {
 }; 
 module.exports.plantFlags = plantFlags;
 
-
-
+var currentFlagFilter = '';
+var flagFilter(flag){
+    if (!flag){ //TODO return false if not a flag
+        return false;
+    }
+    if (!currentFlagFilter){ //no filter
+        return true;
+    }
+    if (currentFlagFilter == 'FREE MINING' && flag.color == COLOR_YELLOW && flag.secondaryColor == COLOR_YELLOW 
+                    && (!flag.memory.creep || !Game.creeps[flag.memory.creep])){
+        //EMPTY mining flag - right color, doesn't have a valid creep in memory
+        return true;    
+    }
+    if (currentFlagFilter == 'ANY MINING' && flag.color == COLOR_YELLOW){
+        return true;
+    }
+    if (currentFlagFilter == 'ANY BUILD' && flag.color == COLOR_GREY){
+        return true;
+    }
+    if (currentFlagFilter == 'ANY BUILDSPOT' && flag.color == COLOR_GREY && (flag.secondaryColor == COLOR_GREY || flag.secondaryColor == COLOR_CYAN)){
+        return true;
+    }
+    if (currentFlagFilter == 'BUILDSPOT_INACTIVE' && flag.color == COLOR_GREY && flag.secondaryColor == COLOR_GREY){
+        return true;
+    }
+    if (currentFlagFilter == 'BUILDSPOT_ACTIVE' && flag.color == COLOR_GREY && flag.secondaryColor == COLOR_CYAN){
+        return true;
+    }
+};
 
 var findFlag = function(room,flagType){
     //locates and returns a flag of the specified type
@@ -150,25 +186,23 @@ var findFlag = function(room,flagType){
 };
 module.exports.findFlag = findFlag;
 
+var findFlagsNear = function(pos,range,flagType){
+    if (!range){ range = 0; }
+    var locflags = pos.findInRange(FIND_FLAGS,range);
+    if (!flagtype || locflags.length == 0){
+        return locflags;
+    }
+    currentFlagFilter = flagType;
+    return locflags.filter(flagFilter);        
+};
+module.exports.findFlagsNear = findFlagsNear;
+
 
 var findAllFlags = function(room,flagType){
     //locates and returns all flags of the specified type
     var flags = room.find(FIND_FLAGS);
-    var out = [];
-    for (var f in flags){
-        var flag = flags[f];
-        if (flagType == 'MINING' && flag.color == COLOR_YELLOW && flag.secondaryColor == COLOR_YELLOW){
-            out.push(flag);
-        }
-        if (flagType == 'BUILDSPOT_INACTIVE' && flag.color == COLOR_GREY && flag.secondaryColor == COLOR_GREY){
-            out.push(flag);
-        }
-        if (flagType == 'BUILDSPOT_ACTIVE' && flag.color == COLOR_GREY && flag.secondaryColor == COLOR_CYAN){
-            out.push(flag);
-        }
-        
-    }
-    return out;
+    currentFlagFilter = flagType;
+    return flags.filter(flagFilter);            
 };
 module.exports.findAllFlags = findAllFlags;
 

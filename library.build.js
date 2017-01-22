@@ -160,11 +160,22 @@ var dropPlanningFlags = function(room){
     var x = 0;
     var y = 0;
     var num_flags=0;
-    for (x=5;x<=44;x+=7){
-        for (y=5;y<=44;y+=7){
+    for (x=5;x<=44;x+=6){
+        for (y=5;y<=44;y+=6){
             //TODO look for building flags already placed too closely    && room.getPosition(x,y).findInRange
-            if (checkBuildable(room,x,y,2,2)){
-                var flagname = room.createFlag(x,y,undefined,COLOR_GREY,COLOR_GREY);    
+            var tp = room.getPositionAt(x,y);
+            if (checkBuildable(room,x,y,2,2) && flag_lib.findFlagsNear(tp,5,'ANY BUILDSPOT').length == 0){
+                var flagname = flag_lib.plantFlag(tp,undefined,COLOR_GREY,COLOR_GREY);    
+                num_flags++;
+            }
+        }
+    }
+    for (x=8;x<=44;x+=6){
+        for (y=8;y<=44;y+=6){
+            //TODO look for building flags already placed too closely    && room.getPosition(x,y).findInRange
+            var tp = room.getPositionAt(x,y);
+            if (checkBuildable(room,x,y,2,2) && flag_lib.findFlagsNear(tp,5,'ANY BUILDSPOT').length == 0){
+                var flagname = flag_lib.plantFlag(tp,undefined,COLOR_GREY,COLOR_GREY);    
                 num_flags++;
             }
         }
