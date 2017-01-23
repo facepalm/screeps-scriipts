@@ -20,6 +20,7 @@ var roleHarvester = {
         
         if (creep.memory.flag){
             var flag = Game.flags[creep.memory.flag];
+            if (!flag){ creep.memory.flag = undefined; } 
             if (creep.pos.inRangeTo(flag.pos, 0)){
                 var harv = creep.harvest(Game.getObjectById(flag.memory.source));
                 if( harv == ERR_NOT_IN_RANGE) {
