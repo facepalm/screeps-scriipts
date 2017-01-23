@@ -25,6 +25,7 @@ var controllerRoom = {
     run: function(room) {
         
         if (!room.memory.planted){
+            strat.initRoom(room);
             builder.dropPlanningFlags(room);
             room.memory.planted = flag_lib.plantFlags(room);
             builder.dropBuilding(room,STRUCTURE_CONTAINER);

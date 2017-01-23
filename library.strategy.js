@@ -20,15 +20,39 @@ if (!Memory.plan){
 var initRoom = function(room){
     if (!room.memory.initialized){ //TODO eventually handle reinitializations
         room.memory.initialized = true;
-        Memory.plan.room[room.name] = {};            
+        if (!Memory.plan.room[room.name]){ Memory.plan.room[room.name] = {}; }
         Memory.plan.room[room.name].spot_build = builder.countPlanningFlags(room);    
         Memory.plan.room[room.name].spot_mine = room.find(FIND_SOURCES).length;
+        Memory.plan.room[room.name].status = 'SCOUTED';
         
-        Memory.plan.room[room.name].role = 'PRIMARY_BASE';
-        Memory.plan.room[room.name].need_cans = false;
-        Memory.plan.room[room.name].build_walls = false;
+        Memory.plan.room[room.name].energy_level = 0;
+        
+        
+        if (Memory.plan.length == 0){
+            Memory.plan.room[room.name].role = 'PRIMARY_BASE';
+            Memory.plan.room[room.name].status = 'CLAIMED';
+            Memory.plan.room[room.name].need_cans = false;
+            Memory.plan.room[room.name].build_walls = false;
+        }else if (Game.map.isRoomAvailable(room.name)){
+            Memory.plan.room[room.name].role = 'AVAILABLE';
+        }else{
+            Memory.plan.room[room.name].role = 'OCCUPIED'; 
+        }
+        
+        var exits = Game.map.describeExits(room.name);
+        Memory.plan.room[room.name].exits = {};
+        for (var e in exits){
+            Memory.plan.room[room.name].exits[e] = exits[e];
+            if (!Memory.plan.room[exits[e]]){ 
+                Memory.plan.room[exits[e]] = {}; 
+                Memory.plan.room[room.name].status = 'UNEXPLORED';
+                Memory.plan.room[room.name].role = 'UNKNOWN';
+            }
+            
+        }
+        
     }
-}
+};module.exports.initRoom = initRoom;
 
 /*var findFlag = function(room,flagType){
     //locates and returns a flag of the specified type
