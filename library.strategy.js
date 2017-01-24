@@ -59,7 +59,7 @@ var updateEnergy = function(room){
                                             - room.memory.input_space - room.memory.store_space - room.memory.endpt_enrgy; 
     Memory.plan.room[room.name].energy_level *= 0.9;
     Memory.plan.room[room.name].energy_level += energy/10;
-    
+    console.log('Room '+room.name+' now has energy level '+Memory.plan.room[room.name].energy_level);
 };module.exports.updateEnergy = updateEnergy;
 
 /*var findFlag = function(room,flagType){

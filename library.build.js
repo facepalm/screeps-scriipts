@@ -205,6 +205,46 @@ var findBuildSpot= function(room,x,y){
 };
 module.exports.findBuildSpot = findBuildSpot;
 
+var activateBuildSpot= function(targetFlag){
+    targetFlag.setColor(COLOR_GREY, COLOR_CYAN);
+
+    //drop roads
+    
+    //facepalm roads template
+    var offsets = [{x:-1,y:1},
+                   {x:-1,y:2},
+                   {x:-2,y:0},
+                   {x:-1,y:-1},
+                   {x:-2,y:-2},
+                   {x:0,y:0},
+                   {x:1,y:1},
+                   {x:1,y:2},
+                   {x:2,y:0},
+                   {x:1,y:-1},
+                   {x:2,y:-2},
+                   
+                   //exterior roads
+                   {x:-2,y:-3},
+                   {x:-1,y:-3},
+                   {x:0,y:-3},
+                   {x:1,y:-3},
+                   {x:2,y:-3},
+                   {x:3,y:-3},
+                   {x:3,y:-2},
+                   {x:3,y:-1},
+                   {x:3,y:0},
+                   {x:3,y:1},
+                   {x:3,y:2} ];
+    for (var o in offsets){
+        var tx = targetFlag.pos.x + offsets[o].x;
+        var ty = targetFlag.pos.y + offsets[o].y;
+        queueBuild(targetFlag.room, targetFlag.room.getPositionAt(tx,ty),STRUCTURE_ROAD,false); 
+    }     
+    return null;              
+};
+module.exports.activateBuildSpot = activateBuildSpot;
+
+
 var dropBuilding = function(room,struct_type){
     var spot = null;    
     //check existing build spots for free room
@@ -221,7 +261,8 @@ var dropBuilding = function(room,struct_type){
         var tar_flags = flag_lib.findAllFlags(room,'BUILDSPOT_INACTIVE');
         if (tar_flags.length){
             var targetFlag = room.controller.pos.findClosestByRange(tar_flags);
-            targetFlag.setColor(COLOR_GREY, COLOR_CYAN);
+            activateBuildSpot(targetFlag);
+            //targetFlag.setColor(COLOR_GREY, COLOR_CYAN);
             var buildspot = findBuildSpot(room,targetFlag.pos.x,targetFlag.pos.y);
             if (buildspot){
                 spot = buildspot;
