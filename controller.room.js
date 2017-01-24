@@ -246,68 +246,72 @@ var controllerRoom = {
             for (var a in xtra_a){
                 room.memory.endpoints[xtra_a[a].id] = true;
             }
-        }
         
         
-        //process energy flow
-        room.memory.input_enrgy = 0
-        room.memory.store_enrgy = 0
-        room.memory.endpt_enrgy = 0
-        room.memory.input_space = 0
-        room.memory.store_space = 0
-        room.memory.endpt_space = 0
         
-        for (var d in room.memory.einput){
-            var donor = Game.getObjectById(d)
-            if (donor.structureType == STRUCTURE_CONTAINER){
-                room.memory.input_enrgy += donor.store[RESOURCE_ENERGY];
-                room.memory.input_space += donor.storeCapacity - donor.store[RESOURCE_ENERGY];
-            }else{
-                room.memory.input_enrgy += donor.energy;
-                room.memory.input_space += donor.energyCapacity - donor.energy;
+            //process energy flow
+            room.memory.input_enrgy = 0
+            room.memory.store_enrgy = 0
+            room.memory.endpt_enrgy = 0
+            room.memory.input_space = 0
+            room.memory.store_space = 0
+            room.memory.endpt_space = 0
+            
+            for (var d in room.memory.einput){
+                var donor = Game.getObjectById(d)
+                if (donor.structureType == STRUCTURE_CONTAINER){
+                    room.memory.input_enrgy += donor.store[RESOURCE_ENERGY];
+                    room.memory.input_space += donor.storeCapacity - donor.store[RESOURCE_ENERGY];
+                }else{
+                    room.memory.input_enrgy += donor.energy;
+                    room.memory.input_space += donor.energyCapacity - donor.energy;
+                }
             }
-        }
-        for (var a in room.memory.estorage){
-            var accpt = Game.getObjectById(a)
-            if (accpt.structureType == STRUCTURE_CONTAINER || accpt.structureType == STRUCTURE_STORAGE){
-                room.memory.store_enrgy += accpt.store[RESOURCE_ENERGY];
-                room.memory.store_space += accpt.storeCapacity - accpt.store[RESOURCE_ENERGY];
-            }else{
-                room.memory.store_enrgy += accpt.energy;
-                room.memory.store_space += accpt.energyCapacity - accpt.energy;
+            for (var a in room.memory.estorage){
+                var accpt = Game.getObjectById(a)
+                if (accpt.structureType == STRUCTURE_CONTAINER || accpt.structureType == STRUCTURE_STORAGE){
+                    room.memory.store_enrgy += accpt.store[RESOURCE_ENERGY];
+                    room.memory.store_space += accpt.storeCapacity - accpt.store[RESOURCE_ENERGY];
+                }else{
+                    room.memory.store_enrgy += accpt.energy;
+                    room.memory.store_space += accpt.energyCapacity - accpt.energy;
+                }
             }
-        }
-        for (var a in room.memory.endpoint){
-            var accpt = Game.getObjectById(a)
-            if (accpt.structureType == STRUCTURE_CONTAINER){
-                room.memory.endpt_enrgy += accpt.store[RESOURCE_ENERGY];
-                room.memory.endpt_space += accpt.storeCapacity - accpt.store[RESOURCE_ENERGY];
-            }else{
-                room.memory.endpt_enrgy += accpt.energy;
-                room.memory.endpt_space += accpt.energyCapacity - accpt.energy;
+            for (var a in room.memory.endpoint){
+                var accpt = Game.getObjectById(a)
+                if (accpt.structureType == STRUCTURE_CONTAINER){
+                    room.memory.endpt_enrgy += accpt.store[RESOURCE_ENERGY];
+                    room.memory.endpt_space += accpt.storeCapacity - accpt.store[RESOURCE_ENERGY];
+                }else{
+                    room.memory.endpt_enrgy += accpt.energy;
+                    room.memory.endpt_space += accpt.energyCapacity - accpt.energy;
+                }
             }
-        }
-        
-        var nrg = room.find(FIND_DROPPED_ENERGY);
-        var tot_nrg = nrg.reduce(function(a, b) { return a + b.amount; }, 0);
-        
-        room.memory.dropped_enrgy = tot_nrg;
-        room.memory.harvest_level = room.memory.input_space + room.memory.store_space + room.memory.endpt_space;
-        room.memory.hauler_level = Math.min(room.memory.input_enrgy + tot_nrg, room.memory.store_space) + Math.min(room.memory.store_enrgy + tot_nrg, room.memory.endpt_space);
-        
-        //build priority
-        room.memory.build_level = 0;
-        var bld = room.find(FIND_CONSTRUCTION_SITES)
-        for (var b in bld){
-            room.memory.build_level += bld[b].progressTotal - bld[b].progress;
-        }
-        
-        room.memory.repair_level=0;
-        var targets = room.find(FIND_STRUCTURES, {
-                filter: (structure) => structure.hits < structure.hitsMax
-            });
-        for (var t in targets) {
-            room.memory.repair_level += targets[t].hitsMax - targets[t].hits;
+            
+            var nrg = room.find(FIND_DROPPED_ENERGY);
+            var tot_nrg = nrg.reduce(function(a, b) { return a + b.amount; }, 0);
+            
+            room.memory.dropped_enrgy = tot_nrg;
+            room.memory.harvest_level = room.memory.input_space + room.memory.store_space + room.memory.endpt_space;
+            room.memory.hauler_level = Math.min(room.memory.input_enrgy + tot_nrg, room.memory.store_space) + Math.min(room.memory.store_enrgy + tot_nrg, room.memory.endpt_space);
+         
+            strat.updateEnergy(room);
+                        
+                
+            //build priority
+            room.memory.build_level = 0;
+            var bld = room.find(FIND_CONSTRUCTION_SITES)
+            for (var b in bld){
+                room.memory.build_level += bld[b].progressTotal - bld[b].progress;
+            }
+            
+            room.memory.repair_level=0;
+            var targets = room.find(FIND_STRUCTURES, {
+                    filter: (structure) => structure.hits < structure.hitsMax
+                });
+            for (var t in targets) {
+                room.memory.repair_level += targets[t].hitsMax - targets[t].hits;
+            }
         }
         
         /* should be called by harvesters

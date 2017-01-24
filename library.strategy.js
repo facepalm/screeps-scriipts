@@ -54,6 +54,14 @@ var initRoom = function(room){
     }
 };module.exports.initRoom = initRoom;
 
+var updateEnergy = function(room){
+    var energy = room.memory.dropped_enrgy  + room.memory.input_enrgy + room.memory.store_enrgy + room.memory.endpt_enrgy 
+                                            - room.memory.input_space - room.memory.store_space - room.memory.endpt_enrgy; 
+    Memory.plan.room[room.name].energy_level *= 0.9;
+    Memory.plan.room[room.name].energy_level += energy/10;
+    
+};module.exports.updateEnergy = updateEnergy;
+
 /*var findFlag = function(room,flagType){
     //locates and returns a flag of the specified type
     if (flagType == 'MINING'){
