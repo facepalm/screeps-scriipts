@@ -293,7 +293,7 @@ var controllerRoom = {
             
             room.memory.dropped_enrgy = tot_nrg;
             room.memory.harvest_level = room.memory.input_space + room.memory.store_space + room.memory.endpt_space;
-            room.memory.hauler_level = Math.min(room.memory.input_enrgy + tot_nrg, room.memory.store_space) + Math.min(room.memory.store_enrgy + tot_nrg, room.memory.endpt_space);
+            room.memory.hauler_level = Math.min(room.memory.input_enrgy + tot_nrg, room.memory.store_space) + Math.min(room.memory.store_enrgy + tot_nrg, room.memory.endpt_space + room.energyCapacityAvailable);
          
             strat.updateEnergy(room);
                         
@@ -325,6 +325,23 @@ var controllerRoom = {
         }else{
             room.memory.sources_run -= 1; 
         }*/
+        
+        //run towers
+        var towers = room.find(FIND_MY_STRUCTURES, { filter: (structure) => structure.structureType == STRUCTURE_TOWER });
+        for (var t in towers){
+            tower = Game.structures[t];
+            var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+                filter: (structure) => structure.hits < structure.hitsMax
+            });
+            if(closestDamagedStructure) {
+                tower.repair(closestDamagedStructure);
+            }
+
+            var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+            if(closestHostile) {
+                tower.attack(closestHostile);
+            }
+        }
         
         //run creeps
         var room_creeps = room.find(FIND_MY_CREEPS);
