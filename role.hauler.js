@@ -89,12 +89,11 @@ var roleHauler = {
                     }
                     creep.transfer(obj,RESOURCE_ENERGY,Math.min(creep.carry.energy,cap));
 	                creep.memory.edest = undefined;
-	            }else{	            
-	                util.creepMove(creep,obj);	
-	                if (creep.room.memory.build_idle){
-	                    //creep.room.createConstructionSite(creep,STRUCTURE_ROAD);
-	                    //builder.buildRoad(creep.pos,obj.pos);
+	            }else{	            	                
+	                if (creep.room.memory.build_idle && Math.random() < 0.05){
+	                    builder.buildRoadAt(creep.pos);
 	                }   
+                    util.creepMove(creep,obj);	
 	            }
 	        }
 	    }	    

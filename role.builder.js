@@ -52,25 +52,7 @@ var roleBuilder = {
 	    }
 	    else {
 	        //if we aren't building, we must be fetching energy
-	        util.fetchEnergy(creep);
-	        /*
-	        
-	        var nrg = creep.room.find(FIND_DROPPED_ENERGY);
-	        if (nrg.length){
-	            //go pick up the top of the list
-	            var pckup = creep.pickup(nrg[0]);
-	            if (pckup == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(nrg[0]);
-                }
-	        }else{	            
-	            for (var s in creep.room.memory.estorage){
-	                var obj = Game.getObjectById(s);
-	                var withd = creep.withdraw(obj,RESOURCE_ENERGY,50);
-	                if (withd == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(obj);
-                    }
-	            }
-	        }*/
+	        util.fetchEnergy(creep);	        
 	    }
 	    return 1;
 	}

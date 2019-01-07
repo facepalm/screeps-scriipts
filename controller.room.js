@@ -220,7 +220,7 @@ var updateRoom = function(room){
         }
     }
     
-    var nrg = room.find(FIND_DROPPED_ENERGY);
+    var nrg = room.find(FIND_DROPPED_RESOURCES, { filter: { resourceType: RESOURCE_ENERGY }});
     var tot_nrg = nrg.reduce(function(a, b) { return a + b.amount; }, 0);
     
     room.memory.dropped_enrgy = tot_nrg;

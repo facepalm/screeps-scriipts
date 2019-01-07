@@ -119,10 +119,7 @@ var findEnergy = function(room,amt, dropped, einputs, estorage, endpoints){
     var elist = {}
     
     if (dropped){
-        var nrg = room.find(FIND_DROPPED_ENERGY, {
-                            filter: function(res) { return res.amount >= amt; }
-                        });
-        var nrg = room.find(FIND_DROPPED_ENERGY);
+        var nrg = room.find(FIND_DROPPED_RESOURCES, { filter: { resourceType: RESOURCE_ENERGY }});
         for (var n in nrg){
             if (nrg[n].amount > amt){
                 elist[nrg[n].id] = 'RESOURCE';

@@ -22,7 +22,7 @@ var flag_lib = require('library.flag');
             var buildpos = findSite(source.room,source.pos,1);
             if (buildpos){
                 source.room.createConstructionSite(buildpos,STRUCTURE_CONTAINER);
-                buildSpurRoad(buildpos)
+                //buildSpurRoad(buildpos)
                 return true;
             }
         }else{
@@ -142,6 +142,11 @@ var buildRoad = function(startPos,endPos){
 }; 
 module.exports.buildRoad = buildRoad;
 
+var buildRoadAt = function(pos){
+    Game.rooms[pos.roomName].createConstructionSite(pos.x,pos.y,STRUCTURE_ROAD);
+}; 
+module.exports.buildRoadAt = buildRoadAt;
+
 var countPlanningFlags = function(room){
     var x = 0;
     var y = 0;
@@ -209,7 +214,7 @@ var activateBuildSpot= function(targetFlag){
     targetFlag.setColor(COLOR_GREY, COLOR_CYAN);
 
     //drop roads
-    
+    /*
     //facepalm roads template
     var offsets = [{x:-1,y:1},
                    {x:-1,y:2},
@@ -241,6 +246,7 @@ var activateBuildSpot= function(targetFlag){
         var ty = targetFlag.pos.y + offsets[o].y;
         queueBuild(targetFlag.room, targetFlag.room.getPositionAt(tx,ty),STRUCTURE_ROAD,false); 
     }     
+    */
     return null;              
 };
 module.exports.activateBuildSpot = activateBuildSpot;
